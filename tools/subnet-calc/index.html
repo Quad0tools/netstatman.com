@@ -1,0 +1,549 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Subnet Calculator — NetStatMan</title>
+  <meta name="description" content="Free visual CIDR subnet calculator with VLSM planner. Calculate network addresses, broadcast addresses, and usable host ranges.">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+  <style>
+    *, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
+    
+    :root {
+      --bg: #0a0a0f;
+      --surface: #12121a;
+      --surface2: #1a1a24;
+      --border: #2a2a3a;
+      --text: #e4e4e7;
+      --text-muted: #71717a;
+      --accent: #00d4aa;
+      --accent2: #3b82f6;
+      --accent-glow: rgba(0, 212, 170, 0.2);
+      --gradient: linear-gradient(135deg, #00d4aa 0%, #3b82f6 100%);
+      --error: #ef4444;
+    }
+    
+    body {
+      background: var(--bg);
+      color: var(--text);
+      font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+      line-height: 1.6;
+      min-height: 100vh;
+    }
+    
+    .container {
+      max-width: 1000px;
+      margin: 0 auto;
+      padding: 0 24px;
+    }
+    
+    nav {
+      padding: 20px 0;
+      border-bottom: 1px solid var(--border);
+      background: rgba(10,10,15,0.95);
+      position: fixed;
+      top: 0; left: 0; right: 0;
+      z-index: 100;
+    }
+    nav .container {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      max-width: 1200px;
+    }
+    .logo {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      font-weight: 700;
+      font-size: 20px;
+      text-decoration: none;
+      color: var(--text);
+    }
+    .logo-icon {
+      width: 40px; height: 40px;
+      background: var(--gradient);
+      border-radius: 10px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 20px;
+    }
+    .back-link {
+      color: var(--text-muted);
+      text-decoration: none;
+      font-size: 14px;
+    }
+    .back-link:hover { color: var(--accent); }
+    
+    main {
+      padding: 100px 0 60px;
+    }
+    
+    h1 {
+      font-size: 32px;
+      font-weight: 700;
+      margin-bottom: 8px;
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+    .subtitle {
+      color: var(--text-muted);
+      margin-bottom: 32px;
+    }
+    
+    .calculator {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 24px;
+    }
+    @media (max-width: 768px) {
+      .calculator { grid-template-columns: 1fr; }
+    }
+    
+    .card {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      padding: 24px;
+    }
+    .card h2 {
+      font-size: 16px;
+      font-weight: 600;
+      margin-bottom: 20px;
+      color: var(--text-muted);
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+    }
+    
+    .input-group {
+      margin-bottom: 20px;
+    }
+    .input-group label {
+      display: block;
+      font-size: 14px;
+      font-weight: 500;
+      margin-bottom: 8px;
+    }
+    .input-row {
+      display: flex;
+      gap: 8px;
+    }
+    input[type="text"], select {
+      width: 100%;
+      padding: 12px 16px;
+      background: var(--surface2);
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      color: var(--text);
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 16px;
+      transition: border-color 0.2s;
+    }
+    input:focus, select:focus {
+      outline: none;
+      border-color: var(--accent);
+    }
+    input.error {
+      border-color: var(--error);
+    }
+    .ip-input {
+      flex: 1;
+    }
+    .cidr-select {
+      width: 100px;
+    }
+    
+    .btn {
+      width: 100%;
+      padding: 14px 24px;
+      background: var(--gradient);
+      border: none;
+      border-radius: 8px;
+      color: #000;
+      font-family: inherit;
+      font-size: 15px;
+      font-weight: 600;
+      cursor: pointer;
+      transition: transform 0.2s, box-shadow 0.2s;
+    }
+    .btn:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 10px 40px var(--accent-glow);
+    }
+    
+    .results {
+      display: none;
+    }
+    .results.visible {
+      display: block;
+    }
+    .result-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 16px;
+    }
+    .result-item {
+      padding: 16px;
+      background: var(--surface2);
+      border-radius: 8px;
+    }
+    .result-item.full {
+      grid-column: 1 / -1;
+    }
+    .result-label {
+      font-size: 12px;
+      color: var(--text-muted);
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+      margin-bottom: 4px;
+    }
+    .result-value {
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 16px;
+      font-weight: 500;
+      color: var(--accent);
+    }
+    .result-value.large {
+      font-size: 24px;
+    }
+    
+    .quick-ref {
+      margin-top: 24px;
+    }
+    .quick-ref h3 {
+      font-size: 14px;
+      font-weight: 600;
+      margin-bottom: 12px;
+      color: var(--text-muted);
+    }
+    .cidr-table {
+      width: 100%;
+      border-collapse: collapse;
+      font-size: 13px;
+    }
+    .cidr-table th, .cidr-table td {
+      padding: 8px 12px;
+      text-align: left;
+      border-bottom: 1px solid var(--border);
+    }
+    .cidr-table th {
+      color: var(--text-muted);
+      font-weight: 500;
+    }
+    .cidr-table td {
+      font-family: 'JetBrains Mono', monospace;
+    }
+    .cidr-table tr:hover {
+      background: var(--surface2);
+    }
+    .cidr-table .clickable {
+      cursor: pointer;
+      color: var(--accent);
+    }
+    .cidr-table .clickable:hover {
+      text-decoration: underline;
+    }
+    
+    .binary-display {
+      margin-top: 24px;
+      padding: 16px;
+      background: var(--surface2);
+      border-radius: 8px;
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 13px;
+      overflow-x: auto;
+    }
+    .binary-row {
+      display: flex;
+      gap: 16px;
+      margin-bottom: 8px;
+    }
+    .binary-label {
+      width: 100px;
+      color: var(--text-muted);
+      flex-shrink: 0;
+    }
+    .binary-value {
+      color: var(--text);
+    }
+    .binary-value .network {
+      color: var(--accent);
+    }
+    .binary-value .host {
+      color: var(--accent2);
+    }
+    
+    footer {
+      padding: 40px 0;
+      border-top: 1px solid var(--border);
+      text-align: center;
+      margin-top: 60px;
+    }
+    footer p {
+      color: var(--text-muted);
+      font-size: 14px;
+    }
+    footer a { color: var(--accent); text-decoration: none; }
+  </style>
+</head>
+<body>
+  <nav>
+    <div class="container">
+      <a href="/" class="logo">
+        <div class="logo-icon">📡</div>
+        NetStatMan
+      </a>
+      <a href="/" class="back-link">← Back to Tools</a>
+    </div>
+  </nav>
+  
+  <main>
+    <div class="container">
+      <h1>🧮 Subnet Calculator</h1>
+      <p class="subtitle">Calculate network details from any IP address and CIDR notation</p>
+      
+      <div class="calculator">
+        <div>
+          <div class="card">
+            <h2>Input</h2>
+            <div class="input-group">
+              <label>IP Address / CIDR</label>
+              <div class="input-row">
+                <input type="text" id="ip-input" class="ip-input" placeholder="192.168.1.0" value="192.168.1.0">
+                <select id="cidr-select" class="cidr-select">
+                  <option value="8">/8</option>
+                  <option value="9">/9</option>
+                  <option value="10">/10</option>
+                  <option value="11">/11</option>
+                  <option value="12">/12</option>
+                  <option value="13">/13</option>
+                  <option value="14">/14</option>
+                  <option value="15">/15</option>
+                  <option value="16">/16</option>
+                  <option value="17">/17</option>
+                  <option value="18">/18</option>
+                  <option value="19">/19</option>
+                  <option value="20">/20</option>
+                  <option value="21">/21</option>
+                  <option value="22">/22</option>
+                  <option value="23">/23</option>
+                  <option value="24" selected>/24</option>
+                  <option value="25">/25</option>
+                  <option value="26">/26</option>
+                  <option value="27">/27</option>
+                  <option value="28">/28</option>
+                  <option value="29">/29</option>
+                  <option value="30">/30</option>
+                  <option value="31">/31</option>
+                  <option value="32">/32</option>
+                </select>
+              </div>
+            </div>
+            <button class="btn" onclick="calculate()">Calculate</button>
+          </div>
+          
+          <div class="quick-ref card" style="margin-top: 24px;">
+            <h2>Quick Reference</h2>
+            <table class="cidr-table">
+              <thead>
+                <tr>
+                  <th>CIDR</th>
+                  <th>Subnet Mask</th>
+                  <th>Hosts</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr><td class="clickable" onclick="setCidr(8)">/8</td><td>255.0.0.0</td><td>16,777,214</td></tr>
+                <tr><td class="clickable" onclick="setCidr(16)">/16</td><td>255.255.0.0</td><td>65,534</td></tr>
+                <tr><td class="clickable" onclick="setCidr(20)">/20</td><td>255.255.240.0</td><td>4,094</td></tr>
+                <tr><td class="clickable" onclick="setCidr(22)">/22</td><td>255.255.252.0</td><td>1,022</td></tr>
+                <tr><td class="clickable" onclick="setCidr(24)">/24</td><td>255.255.255.0</td><td>254</td></tr>
+                <tr><td class="clickable" onclick="setCidr(26)">/26</td><td>255.255.255.192</td><td>62</td></tr>
+                <tr><td class="clickable" onclick="setCidr(28)">/28</td><td>255.255.255.240</td><td>14</td></tr>
+                <tr><td class="clickable" onclick="setCidr(30)">/30</td><td>255.255.255.252</td><td>2</td></tr>
+                <tr><td class="clickable" onclick="setCidr(32)">/32</td><td>255.255.255.255</td><td>1</td></tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+        
+        <div>
+          <div class="card results" id="results">
+            <h2>Results</h2>
+            <div class="result-grid">
+              <div class="result-item full">
+                <div class="result-label">Network</div>
+                <div class="result-value large" id="result-network">-</div>
+              </div>
+              <div class="result-item">
+                <div class="result-label">Subnet Mask</div>
+                <div class="result-value" id="result-mask">-</div>
+              </div>
+              <div class="result-item">
+                <div class="result-label">Wildcard Mask</div>
+                <div class="result-value" id="result-wildcard">-</div>
+              </div>
+              <div class="result-item">
+                <div class="result-label">Broadcast Address</div>
+                <div class="result-value" id="result-broadcast">-</div>
+              </div>
+              <div class="result-item">
+                <div class="result-label">Total Addresses</div>
+                <div class="result-value" id="result-total">-</div>
+              </div>
+              <div class="result-item">
+                <div class="result-label">First Usable</div>
+                <div class="result-value" id="result-first">-</div>
+              </div>
+              <div class="result-item">
+                <div class="result-label">Last Usable</div>
+                <div class="result-value" id="result-last">-</div>
+              </div>
+              <div class="result-item full">
+                <div class="result-label">Usable Hosts</div>
+                <div class="result-value large" id="result-usable">-</div>
+              </div>
+            </div>
+            
+            <div class="binary-display" id="binary-display">
+              <div class="binary-row">
+                <span class="binary-label">IP Address:</span>
+                <span class="binary-value" id="binary-ip">-</span>
+              </div>
+              <div class="binary-row">
+                <span class="binary-label">Subnet Mask:</span>
+                <span class="binary-value" id="binary-mask">-</span>
+              </div>
+              <div class="binary-row">
+                <span class="binary-label">Network:</span>
+                <span class="binary-value" id="binary-network">-</span>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </main>
+  
+  <footer>
+    <div class="container">
+      <p>© 2026 <a href="/">NetStatMan</a>. Free tools for network professionals.</p>
+    </div>
+  </footer>
+  
+  <script>
+    function ipToInt(ip) {
+      const parts = ip.split('.').map(Number);
+      return ((parts[0] << 24) | (parts[1] << 16) | (parts[2] << 8) | parts[3]) >>> 0;
+    }
+    
+    function intToIp(int) {
+      return [
+        (int >>> 24) & 255,
+        (int >>> 16) & 255,
+        (int >>> 8) & 255,
+        int & 255
+      ].join('.');
+    }
+    
+    function intToBinary(int) {
+      return int.toString(2).padStart(32, '0').match(/.{8}/g).join('.');
+    }
+    
+    function isValidIp(ip) {
+      const parts = ip.split('.');
+      if (parts.length !== 4) return false;
+      return parts.every(p => {
+        const n = Number(p);
+        return !isNaN(n) && n >= 0 && n <= 255 && p === String(n);
+      });
+    }
+    
+    function setCidr(cidr) {
+      document.getElementById('cidr-select').value = cidr;
+      calculate();
+    }
+    
+    function calculate() {
+      const ipInput = document.getElementById('ip-input');
+      const ip = ipInput.value.trim();
+      const cidr = parseInt(document.getElementById('cidr-select').value);
+      
+      // Handle CIDR notation in input
+      let actualIp = ip;
+      if (ip.includes('/')) {
+        const parts = ip.split('/');
+        actualIp = parts[0];
+        const inputCidr = parseInt(parts[1]);
+        if (!isNaN(inputCidr) && inputCidr >= 0 && inputCidr <= 32) {
+          document.getElementById('cidr-select').value = inputCidr;
+        }
+      }
+      
+      if (!isValidIp(actualIp)) {
+        ipInput.classList.add('error');
+        return;
+      }
+      ipInput.classList.remove('error');
+      ipInput.value = actualIp;
+      
+      const cidrVal = parseInt(document.getElementById('cidr-select').value);
+      const ipInt = ipToInt(actualIp);
+      const maskInt = cidrVal === 0 ? 0 : (0xFFFFFFFF << (32 - cidrVal)) >>> 0;
+      const wildcardInt = ~maskInt >>> 0;
+      const networkInt = (ipInt & maskInt) >>> 0;
+      const broadcastInt = (networkInt | wildcardInt) >>> 0;
+      const totalAddresses = Math.pow(2, 32 - cidrVal);
+      const usableHosts = cidrVal >= 31 ? totalAddresses : totalAddresses - 2;
+      const firstUsable = cidrVal >= 31 ? networkInt : networkInt + 1;
+      const lastUsable = cidrVal >= 31 ? broadcastInt : broadcastInt - 1;
+      
+      // Update results
+      document.getElementById('result-network').textContent = intToIp(networkInt) + '/' + cidrVal;
+      document.getElementById('result-mask').textContent = intToIp(maskInt);
+      document.getElementById('result-wildcard').textContent = intToIp(wildcardInt);
+      document.getElementById('result-broadcast').textContent = intToIp(broadcastInt);
+      document.getElementById('result-total').textContent = totalAddresses.toLocaleString();
+      document.getElementById('result-first').textContent = intToIp(firstUsable);
+      document.getElementById('result-last').textContent = intToIp(lastUsable);
+      document.getElementById('result-usable').textContent = usableHosts.toLocaleString();
+      
+      // Update binary display with coloring
+      const ipBinary = intToBinary(ipInt);
+      const maskBinary = intToBinary(maskInt);
+      const networkBinary = intToBinary(networkInt);
+      
+      // Color the network and host portions
+      const binaryIp = document.getElementById('binary-ip');
+      const binaryChars = ipBinary.replace(/\./g, '');
+      let coloredBinary = '';
+      for (let i = 0; i < 32; i++) {
+        if (i > 0 && i % 8 === 0) coloredBinary += '.';
+        coloredBinary += i < cidrVal 
+          ? `<span class="network">${binaryChars[i]}</span>`
+          : `<span class="host">${binaryChars[i]}</span>`;
+      }
+      binaryIp.innerHTML = coloredBinary;
+      document.getElementById('binary-mask').textContent = maskBinary;
+      document.getElementById('binary-network').textContent = networkBinary;
+      
+      document.getElementById('results').classList.add('visible');
+    }
+    
+    // Calculate on Enter key
+    document.getElementById('ip-input').addEventListener('keypress', (e) => {
+      if (e.key === 'Enter') calculate();
+    });
+    
+    // Auto-calculate on CIDR change
+    document.getElementById('cidr-select').addEventListener('change', calculate);
+    
+    // Initial calculation
+    calculate();
+  </script>
+</body>
+</html>
