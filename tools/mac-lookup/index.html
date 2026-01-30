@@ -296,7 +296,7 @@
 <div class="container">
   <div class="stats">
     <div class="stat">
-      <div class="number" id="vendor-count">47,000+</div>
+      <div class="number" id="vendor-count">56,000+</div>
       <div class="label">Vendors in Database</div>
     </div>
     <div class="stat">
@@ -364,6 +364,29 @@
     </div>
   </div>
 
+  <div class="result" id="laa-result">
+    <div class="result-header">
+      <div class="result-icon">🎲</div>
+      <div>
+        <h2>Locally Administered Address</h2>
+        <p class="result-prefix">Randomized / Virtual MAC</p>
+      </div>
+    </div>
+    <div class="result-details">
+      <div class="result-item"><span class="label">Input MAC</span><span class="value mono" id="laa-input"></span></div>
+      <div class="result-item"><span class="label">Type</span><span class="value">Locally Administered (LAA)</span></div>
+      <div class="result-item"><span class="label">Binary (First Byte)</span><span class="value mono" id="laa-binary"></span></div>
+      <div class="result-item"><span class="label">Multicast/Unicast</span><span class="value" id="laa-cast"></span></div>
+    </div>
+    <div style="background:var(--surface2); padding:16px; border-radius:8px; margin-top:16px;">
+      <p style="color:var(--text-muted); font-size:14px; line-height:1.6;">
+        <strong style="color:var(--accent);">ℹ️ What this means:</strong><br>
+        This MAC has the <strong>locally administered bit</strong> set (bit 1 of first byte = 1), indicating it was NOT assigned by IEEE to a hardware manufacturer.<br><br>
+        <strong>Common sources:</strong> iOS/Android privacy randomization, virtual machines (VMware, Hyper-V, Docker), software-defined networking, or manually configured addresses.
+      </p>
+    </div>
+  </div>
+
   <div class="bulk-section">
     <h3>📋 Bulk Lookup</h3>
     <p>Paste multiple MAC addresses (one per line) to look up many at once.</p>
@@ -395,9 +418,10 @@ AA-BB-CC-DD-EE-FF
   <p style="margin-top:8px">OUI database from IEEE. Last updated: January 2026</p>
 </footer>
 
+<script src="/tools/mac-lookup/oui-db.js"></script>
 <script>
-// OUI Database (subset - top ~2000 vendors for demo, full version would have 47k+)
-const OUI_DB = {
+// OUI Database loaded from external file (56,000+ vendors)
+const OUI_DB_BACKUP = {
   "000000": "XEROX CORPORATION",
   "000001": "XEROX CORPORATION",
   "000002": "XEROX CORPORATION",
@@ -832,11 +856,13 @@ function lookup() {
   
   document.getElementById('result').classList.remove('show');
   document.getElementById('not-found').classList.remove('show');
+  document.getElementById('laa-result').classList.remove('show');
   
   if(hex.length < 6) return;
   
   const oui = getOui(hex);
   const vendor = OUI_DB[oui];
+  const isLAA = isLocallyAdministered(hex);
   
   if(vendor) {
     document.getElementById('result-icon').textContent = getVendorIcon(vendor);
@@ -849,6 +875,12 @@ function lookup() {
     document.getElementById('result-binary').textContent = parseInt(hex.substring(0, 2), 16).toString(2).padStart(8, '0');
     document.getElementById('result-cast').textContent = isMulticast(hex) ? 'Multicast' : 'Unicast';
     document.getElementById('result').classList.add('show');
+  } else if(isLAA) {
+    // Locally administered address - show explanation
+    document.getElementById('laa-input').textContent = input;
+    document.getElementById('laa-binary').textContent = parseInt(hex.substring(0, 2), 16).toString(2).padStart(8, '0');
+    document.getElementById('laa-cast').textContent = isMulticast(hex) ? 'Multicast' : 'Unicast';
+    document.getElementById('laa-result').classList.add('show');
   } else {
     document.getElementById('not-found').classList.add('show');
   }
@@ -883,7 +915,10 @@ function bulkLookup() {
     const hex = normalizeMac(line.trim());
     if(hex.length >= 6) {
       const oui = getOui(hex);
-      const vendor = OUI_DB[oui] || 'Unknown';
+      let vendor = OUI_DB[oui];
+      if(!vendor) {
+        vendor = isLocallyAdministered(hex) ? '🎲 Locally Administered' : 'Unknown';
+      }
       bulkResults.push({ mac: formatMac(hex.padEnd(12, '0')), oui: formatMac(oui + '000000').substring(0, 8), vendor });
       tbody.innerHTML += `<tr><td>${formatMac(hex.padEnd(12, '0'))}</td><td>${formatMac(oui + '000000').substring(0, 8)}</td><td>${vendor}</td></tr>`;
     }

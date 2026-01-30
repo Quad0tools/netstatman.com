@@ -201,6 +201,76 @@
       text-transform: uppercase;
     }
     
+    /* Terminal Animation */
+    .terminal-hero {
+      width: 100%;
+    }
+    .terminal-window {
+      background: #0d0d0d;
+      border-radius: 8px;
+      overflow: hidden;
+      box-shadow: 0 25px 80px rgba(0,0,0,0.5), 0 0 0 1px rgba(255,255,255,0.1);
+      font-family: var(--mono);
+    }
+    .terminal-header {
+      background: linear-gradient(180deg, #3a3a3a 0%, #2a2a2a 100%);
+      padding: 8px 12px;
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      border-bottom: 1px solid #1a1a1a;
+    }
+    .terminal-buttons {
+      display: flex;
+      gap: 6px;
+    }
+    .terminal-buttons span {
+      width: 12px;
+      height: 12px;
+      border-radius: 50%;
+    }
+    .btn-close { background: #ff5f57; }
+    .btn-min { background: #ffbd2e; }
+    .btn-max { background: #28c940; }
+    .terminal-title {
+      flex: 1;
+      text-align: center;
+      font-size: 12px;
+      color: #888;
+      font-family: 'Inter', sans-serif;
+    }
+    .terminal-body {
+      padding: 16px;
+      min-height: 260px;
+      font-size: 13px;
+      line-height: 1.6;
+      color: #00ff00;
+    }
+    .terminal-output {
+      white-space: pre-wrap;
+      word-break: break-all;
+    }
+    .terminal-output .line { margin: 0; }
+    .terminal-output .prompt { color: #00d4aa; }
+    .terminal-output .command { color: #fff; }
+    .terminal-output .error { color: #ff6b6b; }
+    .terminal-output .warning { color: #ffbd2e; }
+    .terminal-output .info { color: #888; }
+    .terminal-output .success { color: #28c940; }
+    .typing-cursor {
+      display: inline-block;
+      width: 8px;
+      height: 15px;
+      background: #00d4aa;
+      animation: blink 1s infinite;
+      vertical-align: text-bottom;
+      margin-left: 1px;
+    }
+    @keyframes blink {
+      0%, 50% { opacity: 1; }
+      51%, 100% { opacity: 0; }
+    }
+    
     /* Buttons */
     .btn {
       padding: 14px 28px;
@@ -618,7 +688,22 @@
           </div>
         </div>
         <div class="hero-preview">
-          <img src="/assets/screenshots/subnet-calc-full.png" alt="Subnet Calculator Preview">
+          <!-- Animated Terminal -->
+          <div class="terminal-hero">
+            <div class="terminal-window">
+              <div class="terminal-header">
+                <div class="terminal-buttons">
+                  <span class="btn-close"></span>
+                  <span class="btn-min"></span>
+                  <span class="btn-max"></span>
+                </div>
+                <div class="terminal-title">PuTTY — core-rtr-01.lab.local</div>
+              </div>
+              <div class="terminal-body">
+                <div class="terminal-output" id="terminal-output"></div>
+              </div>
+            </div>
+          </div>
           <div class="hero-badge">✨ Free Forever</div>
         </div>
       </div>
@@ -899,5 +984,112 @@
       </div>
     </div>
   </footer>
+
+<script>
+// Terminal Animation
+(function() {
+  const output = document.getElementById('terminal-output');
+  if (!output) return;
+  
+  const sequence = [
+    { type: 'line', text: '<span class="info">core-rtr-01#</span> ', delay: 500 },
+    { type: 'type', text: 'shwo', delay: 90, class: 'command' },
+    { type: 'pause', delay: 150 },
+    { type: 'type', text: ' ip int brief', delay: 60, class: 'command' },
+    { type: 'line', text: '', delay: 400 },
+    { type: 'line', text: '<span class="warning">Translating "shwo"...domain server (255.255.255.255)</span>', delay: 100 },
+    { type: 'pause', delay: 3000 },
+    { type: 'line', text: '', delay: 100 },
+    { type: 'line', text: '<span class="error">% Unknown command or computer name, or unable to find computer address</span>', delay: 100 },
+    { type: 'line', text: '', delay: 500 },
+    { type: 'line', text: '<span class="info">core-rtr-01#</span> ', delay: 600 },
+    { type: 'type', text: 'conf t', delay: 70, class: 'command' },
+    { type: 'line', text: '', delay: 300 },
+    { type: 'line', text: '<span class="info">Enter configuration commands, one per line.  End with CNTL/Z.</span>', delay: 100 },
+    { type: 'line', text: '<span class="info">core-rtr-01(config)#</span> ', delay: 500 },
+    { type: 'type', text: 'no ip domain-lookup', delay: 45, class: 'success' },
+    { type: 'line', text: '', delay: 400 },
+    { type: 'line', text: '<span class="info">core-rtr-01(config)#</span> ', delay: 300 },
+    { type: 'type', text: 'end', delay: 80, class: 'command' },
+    { type: 'line', text: '', delay: 300 },
+    { type: 'line', text: '<span class="info">core-rtr-01#</span> ', delay: 400 },
+    { type: 'line', text: '', delay: 300 },
+    { type: 'line', text: '<span class="success">✓ Never wait for DNS timeouts again</span>', delay: 100 },
+    { type: 'pause', delay: 4000 },
+    { type: 'restart', delay: 0 }
+  ];
+  
+  let cursorSpan = null;
+  
+  function removeCursor() {
+    if (cursorSpan) { cursorSpan.remove(); cursorSpan = null; }
+  }
+  
+  function addCursor() {
+    removeCursor();
+    cursorSpan = document.createElement('span');
+    cursorSpan.className = 'typing-cursor';
+    output.appendChild(cursorSpan);
+  }
+  
+  async function typeText(text, delay, className) {
+    for (let char of text) {
+      removeCursor();
+      const span = document.createElement('span');
+      span.className = className || '';
+      span.textContent = char;
+      output.appendChild(span);
+      addCursor();
+      await sleep(delay + Math.random() * 30);
+    }
+  }
+  
+  function sleep(ms) { return new Promise(r => setTimeout(r, ms)); }
+  
+  async function runSequence() {
+    output.innerHTML = '';
+    addCursor();
+    
+    for (let item of sequence) {
+      if (item.type === 'restart') {
+        await sleep(item.delay);
+        runSequence();
+        return;
+      }
+      if (item.type === 'line') {
+        removeCursor();
+        if (item.text) {
+          const div = document.createElement('div');
+          div.className = 'line';
+          div.innerHTML = item.text;
+          output.appendChild(div);
+        } else {
+          output.appendChild(document.createElement('br'));
+        }
+        addCursor();
+        await sleep(item.delay);
+      }
+      if (item.type === 'type') {
+        await typeText(item.text, item.delay, item.class);
+      }
+      if (item.type === 'pause') {
+        await sleep(item.delay);
+      }
+    }
+  }
+  
+  // Start when visible
+  const observer = new IntersectionObserver((entries) => {
+    entries.forEach(entry => {
+      if (entry.isIntersecting) {
+        runSequence();
+        observer.disconnect();
+      }
+    });
+  }, { threshold: 0.3 });
+  
+  observer.observe(output.closest('.terminal-hero'));
+})();
+</script>
 </body>
 </html>
