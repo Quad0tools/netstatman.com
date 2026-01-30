@@ -1,0 +1,3 @@
+# Cloudflare Pages config
+name = "netstatman"
+pages_build_output_dir = "."
