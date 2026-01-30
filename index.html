@@ -3,11 +3,20 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>NetStatMan — Network Tools for Professionals</title>
-  <meta name="description" content="Free, powerful network utilities for IT professionals. Config backup, subnet calculators, network diagrams, and more.">
+  <title>NetStatMan — Free Network Tools for IT Professionals</title>
+  <meta name="description" content="Free, powerful network utilities for IT professionals. Config backup, subnet calculators, network diagrams, and more. No subscriptions, runs locally.">
+  <meta name="keywords" content="network tools, subnet calculator, CIDR calculator, config backup, network diagram, IT tools, free network utilities">
+  <link rel="canonical" href="https://netstatman.com">
+  
+  <!-- Open Graph -->
+  <meta property="og:title" content="NetStatMan — Free Network Tools">
+  <meta property="og:description" content="Free, powerful network utilities for IT professionals. No subscriptions, runs locally.">
+  <meta property="og:type" content="website">
+  <meta property="og:url" content="https://netstatman.com">
+  
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
   <style>
     *, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
     
@@ -15,13 +24,15 @@
       --bg: #0a0a0f;
       --surface: #12121a;
       --surface2: #1a1a24;
+      --surface3: #222230;
       --border: #2a2a3a;
       --text: #e4e4e7;
       --text-muted: #71717a;
       --accent: #00d4aa;
       --accent2: #3b82f6;
-      --accent-glow: rgba(0, 212, 170, 0.2);
+      --accent-glow: rgba(0, 212, 170, 0.15);
       --gradient: linear-gradient(135deg, #00d4aa 0%, #3b82f6 100%);
+      --mono: 'JetBrains Mono', monospace;
     }
     
     body {
@@ -32,14 +43,14 @@
       overflow-x: hidden;
     }
     
-    /* Grid background */
+    /* Animated grid background */
     .grid-bg {
       position: fixed;
       top: 0; left: 0; right: 0; bottom: 0;
       background-image: 
         linear-gradient(rgba(0,212,170,0.03) 1px, transparent 1px),
         linear-gradient(90deg, rgba(0,212,170,0.03) 1px, transparent 1px);
-      background-size: 50px 50px;
+      background-size: 60px 60px;
       pointer-events: none;
       z-index: 0;
     }
@@ -51,13 +62,20 @@
       position: relative;
       z-index: 1;
     }
+    .container-wide {
+      max-width: 1400px;
+      margin: 0 auto;
+      padding: 0 24px;
+      position: relative;
+      z-index: 1;
+    }
     
     /* Navigation */
     nav {
-      padding: 20px 0;
+      padding: 16px 0;
+      background: rgba(10,10,15,0.9);
+      backdrop-filter: blur(20px);
       border-bottom: 1px solid var(--border);
-      background: rgba(10,10,15,0.8);
-      backdrop-filter: blur(10px);
       position: fixed;
       top: 0;
       left: 0;
@@ -92,6 +110,7 @@
       display: flex;
       gap: 32px;
       list-style: none;
+      align-items: center;
     }
     .nav-links a {
       color: var(--text-muted);
@@ -101,48 +120,85 @@
       transition: color 0.2s;
     }
     .nav-links a:hover { color: var(--accent); }
+    .nav-cta {
+      padding: 8px 16px;
+      background: var(--surface2);
+      border: 1px solid var(--border);
+      border-radius: 6px;
+      color: var(--text) !important;
+      transition: all 0.2s;
+    }
+    .nav-cta:hover {
+      border-color: var(--accent);
+      background: var(--surface3);
+    }
     
     /* Hero */
     .hero {
-      padding: 180px 0 120px;
-      text-align: center;
+      padding: 160px 0 100px;
       position: relative;
+      overflow: hidden;
     }
     .hero::before {
       content: '';
       position: absolute;
-      top: 100px;
+      top: 80px;
       left: 50%;
       transform: translateX(-50%);
-      width: 600px;
-      height: 600px;
-      background: radial-gradient(circle, var(--accent-glow) 0%, transparent 70%);
+      width: 800px;
+      height: 800px;
+      background: radial-gradient(circle, var(--accent-glow) 0%, transparent 60%);
       pointer-events: none;
     }
-    .hero h1 {
-      font-size: clamp(40px, 6vw, 72px);
+    .hero-content {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 60px;
+      align-items: center;
+    }
+    .hero-text h1 {
+      font-size: 52px;
       font-weight: 800;
       line-height: 1.1;
-      margin-bottom: 24px;
-      position: relative;
+      margin-bottom: 20px;
     }
-    .hero h1 span {
+    .hero-text h1 span {
       background: var(--gradient);
       -webkit-background-clip: text;
       -webkit-text-fill-color: transparent;
       background-clip: text;
     }
-    .hero p {
+    .hero-text p {
       font-size: 18px;
       color: var(--text-muted);
-      max-width: 600px;
-      margin: 0 auto 40px;
+      margin-bottom: 32px;
+      line-height: 1.7;
     }
     .hero-buttons {
       display: flex;
-      gap: 16px;
-      justify-content: center;
+      gap: 12px;
       flex-wrap: wrap;
+    }
+    .hero-preview {
+      position: relative;
+    }
+    .hero-preview img {
+      width: 100%;
+      border-radius: 12px;
+      border: 1px solid var(--border);
+      box-shadow: 0 20px 60px rgba(0,0,0,0.4);
+    }
+    .hero-badge {
+      position: absolute;
+      top: -12px;
+      right: -12px;
+      background: var(--gradient);
+      color: #000;
+      padding: 6px 14px;
+      border-radius: 20px;
+      font-size: 12px;
+      font-weight: 700;
+      text-transform: uppercase;
     }
     
     /* Buttons */
@@ -177,8 +233,42 @@
       border-color: var(--accent);
       background: var(--surface2);
     }
+    .btn-ghost {
+      background: transparent;
+      color: var(--text-muted);
+      padding: 14px 20px;
+    }
+    .btn-ghost:hover {
+      color: var(--accent);
+    }
     
-    /* Tools Section */
+    /* Stats Bar */
+    .stats-bar {
+      padding: 40px 0;
+      border-bottom: 1px solid var(--border);
+      background: var(--surface);
+    }
+    .stats-grid {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 32px;
+      text-align: center;
+    }
+    .stat-item h3 {
+      font-size: 36px;
+      font-weight: 700;
+      background: var(--gradient);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+    }
+    .stat-item p {
+      font-size: 14px;
+      color: var(--text-muted);
+      margin-top: 4px;
+    }
+    
+    /* Section */
     .section {
       padding: 100px 0;
     }
@@ -186,32 +276,136 @@
       text-align: center;
       margin-bottom: 60px;
     }
+    .section-label {
+      font-size: 12px;
+      font-weight: 600;
+      text-transform: uppercase;
+      letter-spacing: 2px;
+      color: var(--accent);
+      margin-bottom: 12px;
+    }
     .section-header h2 {
-      font-size: 36px;
+      font-size: 40px;
       font-weight: 700;
       margin-bottom: 16px;
     }
     .section-header p {
       color: var(--text-muted);
-      font-size: 16px;
+      font-size: 18px;
+      max-width: 600px;
+      margin: 0 auto;
     }
     
-    /* Tool Cards */
-    .tools-grid {
-      display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(340px, 1fr));
-      gap: 24px;
+    /* Tool Cards - Featured Style */
+    .tool-showcase {
+      display: flex;
+      flex-direction: column;
+      gap: 80px;
     }
-    .tool-card {
-      background: var(--surface);
+    .tool-feature {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 60px;
+      align-items: center;
+    }
+    .tool-feature:nth-child(even) {
+      direction: rtl;
+    }
+    .tool-feature:nth-child(even) > * {
+      direction: ltr;
+    }
+    .tool-preview {
+      position: relative;
+    }
+    .tool-preview img {
+      width: 100%;
+      border-radius: 12px;
+      border: 1px solid var(--border);
+      box-shadow: 0 20px 60px rgba(0,0,0,0.3);
+      transition: transform 0.3s;
+    }
+    .tool-preview:hover img {
+      transform: scale(1.02);
+    }
+    .tool-info {
+      padding: 20px 0;
+    }
+    .tool-icon {
+      width: 64px;
+      height: 64px;
+      background: var(--surface2);
       border: 1px solid var(--border);
       border-radius: 16px;
-      padding: 32px;
-      transition: all 0.3s;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 32px;
+      margin-bottom: 24px;
+    }
+    .tool-info h3 {
+      font-size: 28px;
+      font-weight: 700;
+      margin-bottom: 12px;
+    }
+    .tool-info > p {
+      color: var(--text-muted);
+      font-size: 16px;
+      margin-bottom: 24px;
+      line-height: 1.7;
+    }
+    .tool-features {
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+      margin-bottom: 28px;
+    }
+    .tool-features li {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      font-size: 14px;
+      color: var(--text-muted);
+    }
+    .tool-features li::before {
+      content: '✓';
+      color: var(--accent);
+      font-weight: 700;
+    }
+    .tool-tags {
+      display: flex;
+      gap: 8px;
+      flex-wrap: wrap;
+      margin-bottom: 24px;
+    }
+    .tag {
+      padding: 6px 12px;
+      background: var(--surface2);
+      border-radius: 6px;
+      font-size: 12px;
+      font-weight: 500;
+      color: var(--text-muted);
+    }
+    
+    /* Coming Soon Section */
+    .coming-soon {
+      background: var(--surface);
+      border-top: 1px solid var(--border);
+      border-bottom: 1px solid var(--border);
+    }
+    .roadmap-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+      gap: 24px;
+    }
+    .roadmap-card {
+      background: var(--surface2);
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      padding: 28px;
       position: relative;
       overflow: hidden;
     }
-    .tool-card::before {
+    .roadmap-card::before {
       content: '';
       position: absolute;
       top: 0;
@@ -219,113 +413,173 @@
       right: 0;
       height: 3px;
       background: var(--gradient);
-      opacity: 0;
-      transition: opacity 0.3s;
+      opacity: 0.5;
     }
-    .tool-card:hover {
+    .roadmap-status {
+      font-size: 11px;
+      font-weight: 600;
+      text-transform: uppercase;
+      letter-spacing: 1px;
+      color: var(--accent);
+      margin-bottom: 12px;
+    }
+    .roadmap-card h4 {
+      font-size: 18px;
+      font-weight: 600;
+      margin-bottom: 8px;
+    }
+    .roadmap-card p {
+      font-size: 14px;
+      color: var(--text-muted);
+      line-height: 1.6;
+    }
+    
+    /* Why Section */
+    .why-grid {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 24px;
+    }
+    .why-card {
+      text-align: center;
+      padding: 32px 24px;
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      transition: all 0.3s;
+    }
+    .why-card:hover {
       border-color: var(--accent);
       transform: translateY(-4px);
     }
-    .tool-card:hover::before {
-      opacity: 1;
-    }
-    .tool-icon {
+    .why-icon {
       width: 56px;
       height: 56px;
+      margin: 0 auto 20px;
       background: var(--surface2);
       border-radius: 12px;
       display: flex;
       align-items: center;
       justify-content: center;
       font-size: 28px;
-      margin-bottom: 20px;
     }
-    .tool-card h3 {
-      font-size: 20px;
-      font-weight: 600;
-      margin-bottom: 12px;
-    }
-    .tool-card p {
-      color: var(--text-muted);
-      font-size: 14px;
-      margin-bottom: 20px;
-      line-height: 1.7;
-    }
-    .tool-tags {
-      display: flex;
-      gap: 8px;
-      flex-wrap: wrap;
-      margin-bottom: 20px;
-    }
-    .tag {
-      padding: 4px 10px;
-      background: var(--surface2);
-      border-radius: 4px;
-      font-size: 11px;
-      font-weight: 500;
-      color: var(--text-muted);
-      text-transform: uppercase;
-      letter-spacing: 0.5px;
-    }
-    .tool-card .btn {
-      width: 100%;
-      justify-content: center;
-    }
-    
-    /* Features */
-    .features {
-      display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
-      gap: 32px;
-      margin-top: 80px;
-    }
-    .feature {
-      text-align: center;
-      padding: 24px;
-    }
-    .feature-icon {
-      width: 64px;
-      height: 64px;
-      margin: 0 auto 20px;
-      background: var(--surface);
-      border: 1px solid var(--border);
-      border-radius: 16px;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      font-size: 28px;
-    }
-    .feature h3 {
-      font-size: 18px;
+    .why-card h3 {
+      font-size: 16px;
       font-weight: 600;
       margin-bottom: 8px;
     }
-    .feature p {
+    .why-card p {
       color: var(--text-muted);
+      font-size: 13px;
+      line-height: 1.6;
+    }
+    
+    /* Newsletter */
+    .newsletter {
+      background: linear-gradient(135deg, rgba(0,212,170,0.1) 0%, rgba(59,130,246,0.1) 100%);
+      border: 1px solid var(--border);
+      border-radius: 20px;
+      padding: 60px;
+      text-align: center;
+      margin-top: 80px;
+    }
+    .newsletter h3 {
+      font-size: 28px;
+      font-weight: 700;
+      margin-bottom: 12px;
+    }
+    .newsletter p {
+      color: var(--text-muted);
+      margin-bottom: 28px;
+    }
+    .newsletter-form {
+      display: flex;
+      gap: 12px;
+      max-width: 420px;
+      margin: 0 auto;
+    }
+    .newsletter-form input {
+      flex: 1;
+      padding: 14px 18px;
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      color: var(--text);
+      font-family: inherit;
       font-size: 14px;
+      outline: none;
+    }
+    .newsletter-form input:focus {
+      border-color: var(--accent);
     }
     
     /* Footer */
     footer {
-      padding: 60px 0;
+      padding: 60px 0 40px;
       border-top: 1px solid var(--border);
-      text-align: center;
     }
-    footer p {
+    .footer-grid {
+      display: grid;
+      grid-template-columns: 2fr 1fr 1fr 1fr;
+      gap: 60px;
+      margin-bottom: 40px;
+    }
+    .footer-brand p {
       color: var(--text-muted);
       font-size: 14px;
+      margin-top: 16px;
+      line-height: 1.7;
     }
-    footer a {
+    .footer-col h4 {
+      font-size: 14px;
+      font-weight: 600;
+      margin-bottom: 16px;
+      color: var(--text);
+    }
+    .footer-col a {
+      display: block;
+      color: var(--text-muted);
+      text-decoration: none;
+      font-size: 14px;
+      padding: 6px 0;
+      transition: color 0.2s;
+    }
+    .footer-col a:hover { color: var(--accent); }
+    .footer-bottom {
+      padding-top: 24px;
+      border-top: 1px solid var(--border);
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      font-size: 13px;
+      color: var(--text-muted);
+    }
+    .footer-bottom a {
       color: var(--accent);
       text-decoration: none;
     }
     
     /* Responsive */
+    @media (max-width: 1024px) {
+      .hero-content { grid-template-columns: 1fr; text-align: center; }
+      .hero-preview { display: none; }
+      .hero-text h1 { font-size: 40px; }
+      .hero-buttons { justify-content: center; }
+      .tool-feature { grid-template-columns: 1fr; }
+      .tool-feature:nth-child(even) { direction: ltr; }
+      .stats-grid { grid-template-columns: repeat(2, 1fr); }
+      .why-grid { grid-template-columns: repeat(2, 1fr); }
+      .footer-grid { grid-template-columns: 1fr 1fr; }
+    }
     @media (max-width: 768px) {
       .nav-links { display: none; }
-      .hero { padding: 140px 0 80px; }
+      .hero { padding: 120px 0 60px; }
       .section { padding: 60px 0; }
-      .tools-grid { grid-template-columns: 1fr; }
+      .why-grid { grid-template-columns: 1fr; }
+      .newsletter { padding: 40px 24px; }
+      .newsletter-form { flex-direction: column; }
+      .footer-grid { grid-template-columns: 1fr; gap: 40px; }
+      .footer-bottom { flex-direction: column; gap: 12px; text-align: center; }
     }
   </style>
 </head>
@@ -340,102 +594,198 @@
       </a>
       <ul class="nav-links">
         <li><a href="#tools">Tools</a></li>
-        <li><a href="https://github.com/netstatman" target="_blank">GitHub</a></li>
+        <li><a href="#roadmap">Roadmap</a></li>
+        <li><a href="https://github.com/Quad0tools" target="_blank">GitHub</a></li>
         <li><a href="#about">About</a></li>
+        <li><a href="/tools/subnet-calc" class="nav-cta">Try Subnet Calc →</a></li>
       </ul>
     </div>
   </nav>
   
   <section class="hero">
+    <div class="container-wide">
+      <div class="hero-content">
+        <div class="hero-text">
+          <h1>Network Tools That<br><span>Actually Work</span></h1>
+          <p>Stop paying for bloated enterprise software. Get free, powerful utilities built by network engineers who got tired of the status quo.</p>
+          <div class="hero-buttons">
+            <a href="#tools" class="btn btn-primary">
+              <span>🔧</span> Explore Tools
+            </a>
+            <a href="https://github.com/Quad0tools" class="btn btn-secondary" target="_blank">
+              <span>⭐</span> Star on GitHub
+            </a>
+          </div>
+        </div>
+        <div class="hero-preview">
+          <img src="/assets/screenshots/subnet-calc-full.png" alt="Subnet Calculator Preview">
+          <div class="hero-badge">✨ Free Forever</div>
+        </div>
+      </div>
+    </div>
+  </section>
+  
+  <section class="stats-bar">
     <div class="container">
-      <h1>Network Tools for<br><span>IT Professionals</span></h1>
-      <p>Free, powerful utilities to manage configs, plan subnets, diagram networks, and more. Built by network engineers, for network engineers.</p>
-      <div class="hero-buttons">
-        <a href="#tools" class="btn btn-primary">
-          <span>⬇️</span> Browse Tools
-        </a>
-        <a href="https://github.com/netstatman" class="btn btn-secondary" target="_blank">
-          <span>⭐</span> Star on GitHub
-        </a>
+      <div class="stats-grid">
+        <div class="stat-item">
+          <h3>100%</h3>
+          <p>Free & Open Source</p>
+        </div>
+        <div class="stat-item">
+          <h3>0</h3>
+          <p>Cloud Dependencies</p>
+        </div>
+        <div class="stat-item">
+          <h3>3+</h3>
+          <p>Professional Tools</p>
+        </div>
+        <div class="stat-item">
+          <h3>∞</h3>
+          <p>Uses Per Day</p>
+        </div>
       </div>
     </div>
   </section>
   
   <section class="section" id="tools">
-    <div class="container">
+    <div class="container-wide">
       <div class="section-header">
-        <h2>Available Tools</h2>
-        <p>Download and run locally — no cloud, no subscriptions, just tools that work.</p>
+        <div class="section-label">Available Now</div>
+        <h2>Professional-Grade Tools</h2>
+        <p>Download and run locally. No accounts, no subscriptions, no data collection. Just tools that solve real problems.</p>
       </div>
       
-      <div class="tools-grid">
-        <!-- Config Scraper -->
-        <div class="tool-card">
-          <div class="tool-icon">🔧</div>
-          <h3>Config Scraper</h3>
-          <p>Automatically backup network device configurations from Cisco, Juniper, Palo Alto, Arista, and UniFi. Git version control with diff tracking.</p>
-          <div class="tool-tags">
-            <span class="tag">Cisco</span>
-            <span class="tag">Juniper</span>
-            <span class="tag">Palo Alto</span>
-            <span class="tag">Git</span>
+      <div class="tool-showcase">
+        <!-- Subnet Calculator -->
+        <div class="tool-feature">
+          <div class="tool-preview">
+            <img src="/assets/screenshots/subnet-calc-full.png" alt="Subnet Calculator">
           </div>
-          <a href="/tools/config-scraper" class="btn btn-secondary">
-            <span>📥</span> Download
-          </a>
+          <div class="tool-info">
+            <div class="tool-icon">🧮</div>
+            <h3>Subnet Calculator</h3>
+            <p>The most comprehensive CIDR calculator you'll find. Visual binary breakdown, instant subnet subdivision, and a VLSM planner for complex multi-subnet designs.</p>
+            <ul class="tool-features">
+              <li>Visual binary breakdown with network/host highlighting</li>
+              <li>Instant subnet subdivision (2-256 subnets)</li>
+              <li>VLSM planner for optimal address allocation</li>
+              <li>Complete CIDR quick reference table</li>
+              <li>Works offline — no internet required</li>
+            </ul>
+            <div class="tool-tags">
+              <span class="tag">IPv4</span>
+              <span class="tag">CIDR</span>
+              <span class="tag">VLSM</span>
+              <span class="tag">Web Tool</span>
+            </div>
+            <a href="/tools/subnet-calc" class="btn btn-primary">
+              <span>🚀</span> Open Tool
+            </a>
+          </div>
         </div>
         
-        <!-- Subnet Calculator -->
-        <div class="tool-card">
-          <div class="tool-icon">🧮</div>
-          <h3>Subnet Calculator</h3>
-          <p>Visual CIDR calculator with subnet breakdown, binary display, and quick reference tables. Plan your IP addressing with ease.</p>
-          <div class="tool-tags">
-            <span class="tag">IPv4</span>
-            <span class="tag">CIDR</span>
-            <span class="tag">Web Tool</span>
+        <!-- Config Scraper -->
+        <div class="tool-feature">
+          <div class="tool-preview">
+            <img src="/assets/screenshots/config-scraper-full.png" alt="Config Scraper">
           </div>
-          <a href="/tools/subnet-calc" class="btn btn-secondary">
-            <span>🚀</span> Open Tool
-          </a>
+          <div class="tool-info">
+            <div class="tool-icon">🔧</div>
+            <h3>Config Scraper</h3>
+            <p>Automatically backup network device configurations from all major vendors. Git version control with diff tracking shows exactly what changed and when.</p>
+            <ul class="tool-features">
+              <li>Multi-vendor: Cisco, Juniper, Palo Alto, Arista, UniFi</li>
+              <li>SSH-based secure config pulls</li>
+              <li>Git auto-commit with change detection</li>
+              <li>Scheduled backups (hourly/daily/weekly)</li>
+              <li>Bulk device import via CSV</li>
+            </ul>
+            <div class="tool-tags">
+              <span class="tag">Cisco</span>
+              <span class="tag">Juniper</span>
+              <span class="tag">Palo Alto</span>
+              <span class="tag">Git</span>
+              <span class="tag">Windows</span>
+            </div>
+            <a href="/tools/config-scraper" class="btn btn-secondary">
+              <span>📥</span> Download
+            </a>
+          </div>
         </div>
         
         <!-- NetDiagram -->
-        <div class="tool-card">
-          <div class="tool-icon">🗺️</div>
-          <h3>NetDiagram</h3>
-          <p>Drag-and-drop network diagram tool. Create professional topology maps with routers, switches, firewalls, and custom connections.</p>
-          <div class="tool-tags">
-            <span class="tag">Diagrams</span>
-            <span class="tag">Topology</span>
-            <span class="tag">Export</span>
+        <div class="tool-feature">
+          <div class="tool-preview" style="background: var(--surface2); border-radius: 12px; border: 1px solid var(--border); height: 400px; display: flex; align-items: center; justify-content: center;">
+            <div style="text-align: center; color: var(--text-muted);">
+              <div style="font-size: 64px; margin-bottom: 16px;">🗺️</div>
+              <div style="font-size: 14px;">Preview Coming Soon</div>
+            </div>
           </div>
-          <a href="/tools/netdiagram" class="btn btn-secondary">
-            <span>📥</span> Download
-          </a>
+          <div class="tool-info">
+            <div class="tool-icon">🗺️</div>
+            <h3>NetDiagram</h3>
+            <p>Create professional network topology diagrams with an intuitive drag-and-drop interface. Export to PNG, SVG, or share interactive views.</p>
+            <ul class="tool-features">
+              <li>Drag-and-drop network device icons</li>
+              <li>Auto-routing connection lines</li>
+              <li>Layer 2/3 topology views</li>
+              <li>Export to PNG, SVG, PDF</li>
+              <li>Import from discovery data</li>
+            </ul>
+            <div class="tool-tags">
+              <span class="tag">Diagrams</span>
+              <span class="tag">Topology</span>
+              <span class="tag">Export</span>
+              <span class="tag">Coming Soon</span>
+            </div>
+            <a href="#" class="btn btn-secondary" style="opacity: 0.6; pointer-events: none;">
+              <span>🚧</span> In Development
+            </a>
+          </div>
         </div>
       </div>
+    </div>
+  </section>
+  
+  <section class="section coming-soon" id="roadmap">
+    <div class="container">
+      <div class="section-header">
+        <div class="section-label">What's Next</div>
+        <h2>Roadmap</h2>
+        <p>We're building the toolkit we always wanted. Here's what's coming.</p>
+      </div>
       
-      <div class="features">
-        <div class="feature">
-          <div class="feature-icon">💰</div>
-          <h3>100% Free</h3>
-          <p>No subscriptions, no trials, no hidden costs. Just download and use.</p>
+      <div class="roadmap-grid">
+        <div class="roadmap-card">
+          <div class="roadmap-status">🔨 In Progress</div>
+          <h4>NetDiagram</h4>
+          <p>Visual network topology builder with drag-and-drop icons, auto-routing, and multiple export formats.</p>
         </div>
-        <div class="feature">
-          <div class="feature-icon">🔒</div>
-          <h3>Runs Locally</h3>
-          <p>Your data stays on your machine. No cloud, no telemetry, no tracking.</p>
+        <div class="roadmap-card">
+          <div class="roadmap-status">📋 Planned</div>
+          <h4>MAC Vendor Lookup</h4>
+          <p>Instant MAC address vendor identification with offline database. Bulk lookup support.</p>
         </div>
-        <div class="feature">
-          <div class="feature-icon">🛠️</div>
-          <h3>Open Source</h3>
-          <p>Inspect the code, contribute improvements, or fork for your own needs.</p>
+        <div class="roadmap-card">
+          <div class="roadmap-status">📋 Planned</div>
+          <h4>DNS Toolkit</h4>
+          <p>Comprehensive DNS tools: lookups, propagation checker, zone file validator, DNSSEC analyzer.</p>
         </div>
-        <div class="feature">
-          <div class="feature-icon">🪟</div>
-          <h3>Windows Ready</h3>
-          <p>Standalone executables that just work. No dependencies to install.</p>
+        <div class="roadmap-card">
+          <div class="roadmap-status">📋 Planned</div>
+          <h4>Bandwidth Calculator</h4>
+          <p>Calculate throughput, transfer times, and capacity planning. Includes common protocol overhead.</p>
+        </div>
+        <div class="roadmap-card">
+          <div class="roadmap-status">💡 Considering</div>
+          <h4>ACL Builder</h4>
+          <p>Visual firewall rule builder with multi-vendor syntax export (Cisco, Juniper, Palo Alto).</p>
+        </div>
+        <div class="roadmap-card">
+          <div class="roadmap-status">💡 Considering</div>
+          <h4>BGP Looking Glass</h4>
+          <p>Query BGP routing tables, AS path visualization, and prefix analysis tools.</p>
         </div>
       </div>
     </div>
@@ -444,15 +794,78 @@
   <section class="section" id="about">
     <div class="container">
       <div class="section-header">
-        <h2>Built by Network Engineers</h2>
-        <p>We got tired of paying for bloated enterprise tools or cobbling together scripts.<br>So we built what we actually needed.</p>
+        <div class="section-label">Why NetStatMan</div>
+        <h2>Built Different</h2>
+        <p>We're network engineers who got tired of the same problems you face every day.</p>
+      </div>
+      
+      <div class="why-grid">
+        <div class="why-card">
+          <div class="why-icon">💰</div>
+          <h3>Actually Free</h3>
+          <p>No "free tier" nonsense. No feature gates. No surprise bills. Just download and use.</p>
+        </div>
+        <div class="why-card">
+          <div class="why-icon">🔒</div>
+          <h3>Your Data, Your Machine</h3>
+          <p>Everything runs locally. No cloud sync, no telemetry, no analytics. Privacy by design.</p>
+        </div>
+        <div class="why-card">
+          <div class="why-icon">⚡</div>
+          <h3>Fast & Lightweight</h3>
+          <p>No Electron bloat. No 500MB downloads. Tools that start instantly and stay responsive.</p>
+        </div>
+        <div class="why-card">
+          <div class="why-icon">🛠️</div>
+          <h3>Open Source</h3>
+          <p>Inspect every line of code. Fork it, improve it, make it yours. MIT licensed.</p>
+        </div>
+      </div>
+      
+      <div class="newsletter">
+        <h3>🚀 Get Notified About New Tools</h3>
+        <p>We'll email you when we ship something new. No spam, unsubscribe anytime.</p>
+        <form class="newsletter-form" action="#" method="POST">
+          <input type="email" placeholder="you@company.com" required>
+          <button type="submit" class="btn btn-primary">Subscribe</button>
+        </form>
       </div>
     </div>
   </section>
   
   <footer>
     <div class="container">
-      <p>© 2026 NetStatMan. Built with ☕ by <a href="https://quad0.com" target="_blank">Quad 0 Consulting</a></p>
+      <div class="footer-grid">
+        <div class="footer-brand">
+          <a href="/" class="logo">
+            <div class="logo-icon">📡</div>
+            NetStatMan
+          </a>
+          <p>Free, professional-grade network tools built by engineers who understand the daily grind of network operations.</p>
+        </div>
+        <div class="footer-col">
+          <h4>Tools</h4>
+          <a href="/tools/subnet-calc">Subnet Calculator</a>
+          <a href="/tools/config-scraper">Config Scraper</a>
+          <a href="#">NetDiagram (Soon)</a>
+        </div>
+        <div class="footer-col">
+          <h4>Resources</h4>
+          <a href="https://github.com/Quad0tools" target="_blank">GitHub</a>
+          <a href="#">Documentation</a>
+          <a href="#">Release Notes</a>
+        </div>
+        <div class="footer-col">
+          <h4>Company</h4>
+          <a href="https://quad0.com" target="_blank">Quad 0 Consulting</a>
+          <a href="#">Contact</a>
+          <a href="#">Privacy</a>
+        </div>
+      </div>
+      <div class="footer-bottom">
+        <p>© 2026 NetStatMan. Built with ☕ by <a href="https://quad0.com" target="_blank">Quad 0 Consulting</a></p>
+        <p>Made for network engineers, by network engineers.</p>
+      </div>
     </div>
   </footer>
 </body>
