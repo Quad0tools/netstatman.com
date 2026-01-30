@@ -310,6 +310,375 @@
       .requirements ul { grid-template-columns: 1fr; }
       .hero h1 { font-size: 32px; }
     }
+
+    /* Demo Browser */
+    .demo-browser {
+      background: #0d0d0d;
+      border-radius: 12px;
+      overflow: hidden;
+      box-shadow: 0 25px 80px rgba(0,0,0,0.5);
+      max-width: 800px;
+      margin: 0 auto;
+      border: 1px solid #333;
+    }
+    .demo-header {
+      background: linear-gradient(180deg, #3a3a3a 0%, #2d2d2d 100%);
+      padding: 10px 14px;
+      display: flex;
+      align-items: center;
+      gap: 14px;
+      border-bottom: 1px solid #222;
+    }
+    .demo-buttons { display: flex; gap: 7px; }
+    .demo-buttons span { width: 12px; height: 12px; border-radius: 50%; }
+    .demo-buttons .btn-close { background: #ff5f57; }
+    .demo-buttons .btn-min { background: #ffbd2e; }
+    .demo-buttons .btn-max { background: #28c940; }
+    .demo-url {
+      flex: 1;
+      background: #1a1a1a;
+      border-radius: 6px;
+      padding: 6px 12px;
+      font-size: 12px;
+      color: #888;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+    .demo-lock { font-size: 10px; }
+    .demo-content {
+      min-height: 420px;
+      background: #12121a;
+      position: relative;
+    }
+    .demo-caption {
+      text-align: center;
+      font-size: 13px;
+      color: var(--text-muted);
+      margin-top: 16px;
+    }
+    
+    /* App UI */
+    .app-topbar {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 8px 16px;
+      background: #0d0d12;
+      border-bottom: 1px solid #222;
+    }
+    .app-brand {
+      font-size: 13px;
+      font-weight: 600;
+      color: #00d4aa;
+    }
+    .app-nav-tabs { display: flex; gap: 8px; }
+    .nav-tab {
+      padding: 6px 12px;
+      font-size: 11px;
+      color: #666;
+      background: #1a1a24;
+      border-radius: 6px;
+    }
+    .nav-tab.active {
+      background: #222;
+      color: #00d4aa;
+    }
+    .app-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 16px;
+      border-bottom: 1px solid #2a2a3a;
+      background: #12121a;
+    }
+    .app-title-row {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+    .app-icon {
+      width: 40px;
+      height: 40px;
+      background: linear-gradient(135deg, #1a3a5f, #2a4a6f);
+      border-radius: 10px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 20px;
+    }
+    .app-title {
+      font-weight: 700;
+      font-size: 16px;
+      color: #00d4aa;
+    }
+    .app-subtitle {
+      font-size: 11px;
+      color: #666;
+    }
+    .app-actions { display: flex; gap: 8px; }
+    
+    /* Stats Row */
+    .stats-row {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 12px;
+      padding: 16px;
+      background: #0f0f14;
+    }
+    .stat-card {
+      background: #1a1a24;
+      border-radius: 8px;
+      padding: 14px 16px;
+      border: 1px solid #2a2a3a;
+    }
+    .stat-label {
+      font-size: 9px;
+      color: #555;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+      margin-bottom: 6px;
+    }
+    .stat-value {
+      font-size: 18px;
+      font-weight: 700;
+      color: #e4e4e7;
+    }
+    .stat-sub {
+      font-size: 10px;
+      color: #555;
+      margin-top: 2px;
+    }
+    .app-btn {
+      padding: 7px 14px;
+      border-radius: 6px;
+      font-size: 12px;
+      font-weight: 500;
+      border: 1px solid #3a3a4a;
+      background: #222230;
+      color: #e4e4e7;
+      cursor: pointer;
+      transition: all 0.15s;
+    }
+    .app-btn:hover { border-color: #00d4aa; }
+    .app-btn-primary {
+      background: linear-gradient(135deg, #00d4aa, #00b894);
+      border: none;
+      color: #000;
+    }
+    .app-btn-primary:hover { opacity: 0.9; }
+    
+    /* Tabs */
+    .app-tabs {
+      display: flex;
+      gap: 0;
+      background: #16161e;
+      border-bottom: 1px solid #2a2a3a;
+    }
+    .app-tab {
+      padding: 10px 20px;
+      font-size: 12px;
+      color: #666;
+      cursor: pointer;
+      border-bottom: 2px solid transparent;
+      transition: all 0.15s;
+    }
+    .app-tab.active {
+      color: #00d4aa;
+      border-bottom-color: #00d4aa;
+      background: rgba(0,212,170,0.05);
+    }
+    
+    /* Device Table */
+    .app-view { padding: 16px; }
+    .app-view.hidden { display: none; }
+    .device-table {
+      width: 100%;
+      border-collapse: collapse;
+      font-size: 12px;
+    }
+    .device-table th {
+      text-align: left;
+      padding: 10px 12px;
+      color: #666;
+      font-weight: 500;
+      text-transform: uppercase;
+      font-size: 10px;
+      letter-spacing: 0.5px;
+      border-bottom: 1px solid #2a2a3a;
+    }
+    .device-table td {
+      padding: 12px;
+      border-bottom: 1px solid #222;
+    }
+    .device-name { color: #00d4aa; font-weight: 500; }
+    .device-host { color: #888; font-family: var(--mono); }
+    .vendor-tag {
+      padding: 3px 8px;
+      border-radius: 4px;
+      font-size: 10px;
+      font-weight: 600;
+    }
+    .vendor-tag.cisco { background: #1e3a5f; color: #5ba3e0; }
+    .vendor-tag.palo { background: #3d2a1f; color: #f5a623; }
+    .vendor-tag.juniper { background: #1f3d2a; color: #4ade80; }
+    .status-dot {
+      display: inline-block;
+      width: 8px;
+      height: 8px;
+      border-radius: 50%;
+      margin-right: 6px;
+    }
+    .status-dot.green { background: #22c55e; }
+    .status-dot.yellow { background: #f59e0b; animation: pulse 1s infinite; }
+    .dim { color: #555; }
+    
+    @keyframes pulse {
+      0%, 100% { opacity: 1; }
+      50% { opacity: 0.5; }
+    }
+    
+    /* Modal */
+    .modal {
+      position: absolute;
+      top: 0; left: 0; right: 0; bottom: 0;
+      background: rgba(0,0,0,0.7);
+      display: none;
+      align-items: center;
+      justify-content: center;
+      z-index: 10;
+    }
+    .modal.show { display: flex; }
+    .modal-content {
+      background: #1a1a24;
+      border-radius: 12px;
+      width: 360px;
+      border: 1px solid #333;
+      box-shadow: 0 20px 60px rgba(0,0,0,0.5);
+    }
+    .modal-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 16px 20px;
+      border-bottom: 1px solid #2a2a3a;
+    }
+    .modal-header h3 { font-size: 15px; font-weight: 600; }
+    .modal-close { font-size: 24px; color: #666; cursor: pointer; line-height: 1; }
+    .modal-body { padding: 20px; }
+    .modal-footer {
+      padding: 16px 20px;
+      border-top: 1px solid #2a2a3a;
+      display: flex;
+      justify-content: flex-end;
+      gap: 10px;
+    }
+    .form-row { margin-bottom: 14px; }
+    .form-row label {
+      display: block;
+      font-size: 11px;
+      color: #888;
+      margin-bottom: 6px;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+    }
+    .form-row input, .form-row select {
+      width: 100%;
+      padding: 10px 12px;
+      background: #12121a;
+      border: 1px solid #333;
+      border-radius: 6px;
+      color: #e4e4e7;
+      font-size: 13px;
+      font-family: inherit;
+    }
+    .form-row input:focus, .form-row select:focus {
+      outline: none;
+      border-color: #00d4aa;
+    }
+    .form-row input.typing {
+      border-color: #00d4aa;
+      box-shadow: 0 0 0 2px rgba(0,212,170,0.2);
+    }
+    
+    /* Toast */
+    .backup-toast {
+      position: absolute;
+      bottom: 20px;
+      left: 50%;
+      transform: translateX(-50%);
+      background: #1a1a24;
+      border: 1px solid #333;
+      border-radius: 8px;
+      padding: 12px 20px;
+      display: none;
+      align-items: center;
+      gap: 12px;
+      font-size: 13px;
+      box-shadow: 0 10px 40px rgba(0,0,0,0.4);
+    }
+    .backup-toast.show { display: flex; }
+    .toast-spinner {
+      width: 16px;
+      height: 16px;
+      border: 2px solid #333;
+      border-top-color: #00d4aa;
+      border-radius: 50%;
+      animation: spin 0.8s linear infinite;
+    }
+    .toast-success { color: #22c55e; }
+    @keyframes spin {
+      to { transform: rotate(360deg); }
+    }
+    
+    /* Config Viewer */
+    #view-config {
+      display: none;
+      padding: 0;
+    }
+    #view-config.show {
+      display: flex;
+      height: 340px;
+    }
+    .config-sidebar {
+      width: 160px;
+      background: #16161e;
+      border-right: 1px solid #2a2a3a;
+      padding: 12px 0;
+    }
+    .config-device {
+      padding: 10px 16px;
+      font-size: 12px;
+      color: #888;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+    }
+    .config-device.active {
+      background: rgba(0,212,170,0.1);
+      color: #00d4aa;
+    }
+    .config-device.highlight {
+      background: rgba(0,212,170,0.2);
+      color: #00d4aa;
+    }
+    .config-content {
+      flex: 1;
+      overflow: auto;
+      background: #0d0d0d;
+    }
+    .config-text {
+      margin: 0;
+      padding: 16px;
+      font-family: var(--mono);
+      font-size: 11px;
+      line-height: 1.5;
+      color: #a0a0a0;
+    }
+    .config-text .keyword { color: #c792ea; }
+    .config-text .string { color: #c3e88d; }
+    .config-text .number { color: #f78c6c; }
+    .config-text .comment { color: #546e7a; }
   </style>
 </head>
 <body>
@@ -340,9 +709,165 @@
   </section>
   
   <div class="container">
-    <div class="screenshot">
-      <img src="/assets/screenshots/config-scraper-full.png" alt="Config Scraper Screenshot">
+    <!-- Interactive Demo -->
+    <div class="demo-browser" id="demo-browser">
+      <div class="demo-header">
+        <div class="demo-buttons">
+          <span class="btn-close"></span>
+          <span class="btn-min"></span>
+          <span class="btn-max"></span>
+        </div>
+        <div class="demo-url">
+          <span class="demo-lock">🔒</span>
+          <span>localhost:3078</span>
+        </div>
+      </div>
+      <div class="demo-content">
+        <!-- App Header -->
+        <div class="app-topbar">
+          <div class="app-brand">✨ <span>Clawd Tools</span></div>
+          <div class="app-nav-tabs">
+            <span class="nav-tab">Clawd State</span>
+            <span class="nav-tab active">🔧 Config Scraper</span>
+          </div>
+        </div>
+        
+        <div class="app-header">
+          <div class="app-title-row">
+            <div class="app-icon">🔧</div>
+            <div>
+              <div class="app-title">Config Scraper</div>
+              <div class="app-subtitle">Network Configuration Backup</div>
+            </div>
+          </div>
+          <div class="app-actions">
+            <button class="app-btn" id="btn-backup">⚡ Backup All</button>
+            <button class="app-btn" id="btn-import">📁 Bulk Import</button>
+            <button class="app-btn app-btn-primary" id="btn-add">+ Add Device</button>
+          </div>
+        </div>
+        
+        <!-- Stats Row -->
+        <div class="stats-row">
+          <div class="stat-card">
+            <div class="stat-label">DEVICES</div>
+            <div class="stat-value" id="stat-devices">2</div>
+          </div>
+          <div class="stat-card">
+            <div class="stat-label">LAST BACKUP</div>
+            <div class="stat-value">2 hrs ago</div>
+          </div>
+          <div class="stat-card">
+            <div class="stat-label">CONFIG CHANGES</div>
+            <div class="stat-value" id="stat-changes">3</div>
+            <div class="stat-sub">Git commits</div>
+          </div>
+          <div class="stat-card">
+            <div class="stat-label">STATUS</div>
+            <div class="stat-value"><span class="status-dot green"></span> Ready</div>
+          </div>
+        </div>
+        
+        <!-- Tabs -->
+        <div class="app-tabs">
+          <div class="app-tab active" id="tab-devices">📡 Devices</div>
+          <div class="app-tab" id="tab-viewer">📄 Config Viewer</div>
+          <div class="app-tab" id="tab-history">📊 History</div>
+          <div class="app-tab" id="tab-schedule">📅 Schedule</div>
+        </div>
+        
+        <!-- Devices View -->
+        <div class="app-view" id="view-devices">
+          <table class="device-table">
+            <thead>
+              <tr><th>Name</th><th>Host</th><th>Vendor</th><th>Status</th><th>Last Backup</th></tr>
+            </thead>
+            <tbody id="device-tbody">
+              <tr>
+                <td class="device-name">core-rtr-01</td>
+                <td class="device-host">10.0.0.1</td>
+                <td><span class="vendor-tag cisco">Cisco IOS</span></td>
+                <td><span class="status-dot green"></span> Ready</td>
+                <td class="dim">2 hours ago</td>
+              </tr>
+              <tr>
+                <td class="device-name">fw-edge-01</td>
+                <td class="device-host">10.0.0.2</td>
+                <td><span class="vendor-tag palo">Palo Alto</span></td>
+                <td><span class="status-dot green"></span> Ready</td>
+                <td class="dim">2 hours ago</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+        
+        <!-- Add Device Modal -->
+        <div class="modal" id="modal-add">
+          <div class="modal-content">
+            <div class="modal-header">
+              <h3>Add New Device</h3>
+              <span class="modal-close" id="modal-close">×</span>
+            </div>
+            <div class="modal-body">
+              <div class="form-row">
+                <label>Device Name</label>
+                <input type="text" id="input-name" placeholder="e.g. dist-sw-01">
+              </div>
+              <div class="form-row">
+                <label>Host / IP</label>
+                <input type="text" id="input-host" placeholder="e.g. 10.0.0.10">
+              </div>
+              <div class="form-row">
+                <label>Vendor</label>
+                <select id="input-vendor">
+                  <option>Cisco IOS</option>
+                  <option>Cisco NX-OS</option>
+                  <option>Juniper JunOS</option>
+                  <option>Palo Alto</option>
+                </select>
+              </div>
+              <div class="form-row">
+                <label>Username</label>
+                <input type="text" id="input-user" placeholder="admin">
+              </div>
+              <div class="form-row">
+                <label>Password</label>
+                <input type="password" id="input-pass" value="">
+              </div>
+            </div>
+            <div class="modal-footer">
+              <button class="app-btn" id="btn-cancel">Cancel</button>
+              <button class="app-btn app-btn-primary" id="btn-save">Save Device</button>
+            </div>
+          </div>
+        </div>
+        
+        <!-- Backup Progress -->
+        <div class="backup-toast" id="backup-toast">
+          <div class="toast-spinner"></div>
+          <span id="toast-text">Backing up devices...</span>
+        </div>
+        
+        <!-- Config Viewer -->
+        <div class="app-view hidden" id="view-config">
+          <div class="config-sidebar">
+            <div class="config-device active">
+              <span class="status-dot green"></span> core-rtr-01
+            </div>
+            <div class="config-device">
+              <span class="status-dot green"></span> fw-edge-01
+            </div>
+            <div class="config-device" id="new-device-sidebar">
+              <span class="status-dot green"></span> dist-sw-01
+            </div>
+          </div>
+          <div class="config-content">
+            <pre class="config-text" id="config-text">!</pre>
+          </div>
+        </div>
+      </div>
     </div>
+    <p class="demo-caption">☝️ Live demo — watch the full workflow loop automatically</p>
     
     <section class="section">
       <h2 class="section-title">🏢 Supported Vendors</h2>
@@ -427,6 +952,7 @@
         <span class="version-badge">v1.0.0</span>
       </a>
     </div>
+
   </div>
   
   <footer>
@@ -434,5 +960,205 @@
       <p>© 2026 <a href="/">NetStatMan</a> — Built by <a href="https://quad0.com" target="_blank">Quad 0 Consulting</a></p>
     </div>
   </footer>
+
+<script>
+(function() {
+  const demo = document.getElementById('demo-browser');
+  if (!demo) return;
+
+  const $ = id => document.getElementById(id);
+  const sleep = ms => new Promise(r => setTimeout(r, ms));
+
+  // Elements
+  const modal = $('modal-add');
+  const toast = $('backup-toast');
+  const toastText = $('toast-text');
+  const inputName = $('input-name');
+  const inputHost = $('input-host');
+  const inputVendor = $('input-vendor');
+  const inputUser = $('input-user');
+  const inputPass = $('input-pass');
+  const btnAdd = $('btn-add');
+  const btnBackup = $('btn-backup');
+  const btnSave = $('btn-save');
+  const deviceTbody = $('device-tbody');
+  const tabDevices = $('tab-devices');
+  const tabViewer = $('tab-viewer');
+  const viewDevices = $('view-devices');
+  const viewConfig = $('view-config');
+  const configText = $('config-text');
+  const newDeviceSidebar = $('new-device-sidebar');
+
+  const sampleConfig = `<span class="comment">!</span>
+<span class="comment">! Cisco IOS Configuration</span>
+<span class="comment">! Last modified: 2026-01-30 10:15:42</span>
+<span class="comment">!</span>
+<span class="keyword">hostname</span> dist-sw-01
+<span class="comment">!</span>
+<span class="keyword">enable secret</span> <span class="number">9</span> $9$xxxxxxxxxxxx
+<span class="comment">!</span>
+<span class="keyword">interface</span> GigabitEthernet0/1
+ <span class="keyword">description</span> <span class="string">Uplink to Core</span>
+ <span class="keyword">switchport mode</span> trunk
+ <span class="keyword">switchport trunk allowed vlan</span> <span class="number">10,20,30,40</span>
+<span class="comment">!</span>
+<span class="keyword">interface</span> GigabitEthernet0/2
+ <span class="keyword">description</span> <span class="string">Access Port - Office</span>
+ <span class="keyword">switchport mode</span> access
+ <span class="keyword">switchport access vlan</span> <span class="number">10</span>
+<span class="comment">!</span>
+<span class="keyword">interface</span> Vlan10
+ <span class="keyword">ip address</span> <span class="number">10.0.10.2 255.255.255.0</span>
+<span class="comment">!</span>
+<span class="keyword">ip default-gateway</span> <span class="number">10.0.10.1</span>
+<span class="comment">!</span>
+<span class="keyword">line vty</span> <span class="number">0 4</span>
+ <span class="keyword">transport input</span> ssh
+<span class="comment">!</span>
+<span class="keyword">end</span>`;
+
+  async function typeText(input, text, delay = 50) {
+    input.classList.add('typing');
+    input.value = '';
+    for (let char of text) {
+      input.value += char;
+      await sleep(delay + Math.random() * 30);
+    }
+    input.classList.remove('typing');
+  }
+
+  async function flashButton(btn) {
+    btn.style.transform = 'scale(0.95)';
+    btn.style.opacity = '0.8';
+    await sleep(100);
+    btn.style.transform = '';
+    btn.style.opacity = '';
+  }
+
+  function reset() {
+    modal.classList.remove('show');
+    toast.classList.remove('show');
+    viewConfig.classList.remove('show');
+    viewDevices.style.display = '';
+    tabDevices.classList.add('active');
+    tabViewer.classList.remove('active');
+    inputName.value = '';
+    inputHost.value = '';
+    inputUser.value = '';
+    inputPass.value = '';
+    // Remove any added rows
+    const newRow = deviceTbody.querySelector('.new-device-row');
+    if (newRow) newRow.remove();
+    newDeviceSidebar.style.display = 'none';
+    // Reset stats
+    const statDevices = document.getElementById('stat-devices');
+    if (statDevices) statDevices.textContent = '2';
+  }
+
+  async function runDemo() {
+    reset();
+    await sleep(1500);
+
+    // Step 1: Click Add Device
+    await flashButton(btnAdd);
+    await sleep(200);
+    modal.classList.add('show');
+    await sleep(600);
+
+    // Step 2: Fill form
+    await typeText(inputName, 'dist-sw-01', 60);
+    await sleep(300);
+    await typeText(inputHost, '10.0.0.10', 60);
+    await sleep(300);
+    inputVendor.value = 'Cisco NX-OS';
+    await sleep(200);
+    await typeText(inputUser, 'admin', 70);
+    await sleep(300);
+    await typeText(inputPass, 'SecurePass123', 40);
+    await sleep(500);
+
+    // Step 3: Save
+    await flashButton(btnSave);
+    await sleep(200);
+    modal.classList.remove('show');
+    await sleep(300);
+
+    // Add new row to table
+    const newRow = document.createElement('tr');
+    newRow.className = 'new-device-row';
+    newRow.innerHTML = `
+      <td class="device-name">dist-sw-01</td>
+      <td class="device-host">10.0.0.10</td>
+      <td><span class="vendor-tag cisco">Cisco NX-OS</span></td>
+      <td><span class="status-dot green"></span> Ready</td>
+      <td class="dim">Never</td>
+    `;
+    newRow.style.background = 'rgba(0,212,170,0.1)';
+    deviceTbody.appendChild(newRow);
+    // Update device count
+    const statDevices = document.getElementById('stat-devices');
+    if (statDevices) statDevices.textContent = '3';
+    await sleep(800);
+    newRow.style.background = '';
+    await sleep(600);
+
+    // Step 4: Click Backup All
+    await flashButton(btnBackup);
+    await sleep(200);
+    toast.classList.add('show');
+    toastText.innerHTML = '<span>Backing up 3 devices...</span>';
+    await sleep(1200);
+    toastText.innerHTML = '<span>Connecting to core-rtr-01...</span>';
+    await sleep(800);
+    toastText.innerHTML = '<span>Connecting to fw-edge-01...</span>';
+    await sleep(800);
+    toastText.innerHTML = '<span>Connecting to dist-sw-01...</span>';
+    await sleep(1000);
+    toastText.innerHTML = '<span class="toast-success">✓ Backup complete! 3 devices</span>';
+    await sleep(1500);
+    toast.classList.remove('show');
+    await sleep(500);
+
+    // Step 5: Switch to Config Viewer
+    tabDevices.classList.remove('active');
+    tabViewer.classList.add('active');
+    viewDevices.style.display = 'none';
+    viewConfig.classList.add('show');
+    newDeviceSidebar.style.display = '';
+    await sleep(400);
+
+    // Highlight new device and show config
+    newDeviceSidebar.classList.add('highlight');
+    await sleep(300);
+    
+    // Type out config
+    configText.innerHTML = '';
+    const lines = sampleConfig.split('\n');
+    for (let line of lines) {
+      configText.innerHTML += line + '\n';
+      await sleep(40);
+    }
+    
+    await sleep(3000);
+    newDeviceSidebar.classList.remove('highlight');
+    
+    // Loop
+    await sleep(2000);
+    runDemo();
+  }
+
+  // Start when visible
+  const observer = new IntersectionObserver((entries) => {
+    entries.forEach(entry => {
+      if (entry.isIntersecting) {
+        runDemo();
+        observer.disconnect();
+      }
+    });
+  }, { threshold: 0.3 });
+
+  observer.observe(demo);
+})();
+</script>
 </body>
 </html>
