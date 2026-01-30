@@ -12,17 +12,19 @@
     *, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
     
     :root {
-      --bg: #0a0a0f;
-      --surface: #12121a;
-      --surface2: #1a1a24;
-      --border: #2a2a3a;
+      --bg: #0f0f14;
+      --surface: #16161e;
+      --surface2: #1e1e28;
+      --surface3: #26262f;
+      --border: #2e2e3a;
       --text: #e4e4e7;
       --text-muted: #71717a;
       --accent: #00d4aa;
       --accent2: #3b82f6;
-      --accent-glow: rgba(0, 212, 170, 0.2);
-      --gradient: linear-gradient(135deg, #00d4aa 0%, #3b82f6 100%);
+      --accent3: #8b5cf6;
+      --warning: #f59e0b;
       --error: #ef4444;
+      --success: #10b981;
     }
     
     body {
@@ -34,15 +36,16 @@
     }
     
     .container {
-      max-width: 1000px;
+      max-width: 1200px;
       margin: 0 auto;
       padding: 0 24px;
     }
     
+    /* Nav */
     nav {
-      padding: 20px 0;
+      padding: 16px 0;
       border-bottom: 1px solid var(--border);
-      background: rgba(10,10,15,0.95);
+      background: var(--surface);
       position: fixed;
       top: 0; left: 0; right: 0;
       z-index: 100;
@@ -51,232 +54,408 @@
       display: flex;
       align-items: center;
       justify-content: space-between;
-      max-width: 1200px;
     }
     .logo {
       display: flex;
       align-items: center;
-      gap: 12px;
+      gap: 10px;
       font-weight: 700;
-      font-size: 20px;
+      font-size: 18px;
       text-decoration: none;
       color: var(--text);
     }
     .logo-icon {
-      width: 40px; height: 40px;
-      background: var(--gradient);
-      border-radius: 10px;
+      width: 36px; height: 36px;
+      background: linear-gradient(135deg, var(--accent) 0%, var(--accent2) 100%);
+      border-radius: 8px;
       display: flex;
       align-items: center;
       justify-content: center;
-      font-size: 20px;
+      font-size: 18px;
     }
     .back-link {
       color: var(--text-muted);
       text-decoration: none;
-      font-size: 14px;
+      font-size: 13px;
+      padding: 8px 16px;
+      border-radius: 6px;
+      transition: all 0.2s;
     }
-    .back-link:hover { color: var(--accent); }
+    .back-link:hover { 
+      color: var(--text);
+      background: var(--surface2);
+    }
     
     main {
-      padding: 100px 0 60px;
+      padding: 90px 0 60px;
     }
     
-    h1 {
-      font-size: 32px;
-      font-weight: 700;
-      margin-bottom: 8px;
-      display: flex;
-      align-items: center;
-      gap: 12px;
-    }
-    .subtitle {
-      color: var(--text-muted);
+    /* Header */
+    .page-header {
       margin-bottom: 32px;
     }
-    
-    .calculator {
-      display: grid;
-      grid-template-columns: 1fr 1fr;
-      gap: 24px;
+    .page-header h1 {
+      font-size: 28px;
+      font-weight: 700;
+      margin-bottom: 4px;
     }
-    @media (max-width: 768px) {
-      .calculator { grid-template-columns: 1fr; }
+    .page-header p {
+      color: var(--text-muted);
+      font-size: 14px;
     }
     
+    /* Tabs */
+    .tabs {
+      display: flex;
+      gap: 4px;
+      margin-bottom: 24px;
+      background: var(--surface);
+      padding: 4px;
+      border-radius: 10px;
+      width: fit-content;
+    }
+    .tab {
+      padding: 10px 20px;
+      background: transparent;
+      border: none;
+      border-radius: 6px;
+      color: var(--text-muted);
+      font-family: inherit;
+      font-size: 14px;
+      font-weight: 500;
+      cursor: pointer;
+      transition: all 0.2s;
+    }
+    .tab:hover { color: var(--text); }
+    .tab.active {
+      background: var(--surface2);
+      color: var(--text);
+    }
+    
+    /* Cards */
     .card {
       background: var(--surface);
       border: 1px solid var(--border);
       border-radius: 12px;
-      padding: 24px;
+      overflow: hidden;
     }
-    .card h2 {
-      font-size: 16px;
+    .card-header {
+      padding: 16px 20px;
+      border-bottom: 1px solid var(--border);
+      font-size: 14px;
       font-weight: 600;
-      margin-bottom: 20px;
       color: var(--text-muted);
       text-transform: uppercase;
       letter-spacing: 0.5px;
     }
+    .card-body {
+      padding: 20px;
+    }
     
-    .input-group {
-      margin-bottom: 20px;
+    /* Grid Layout */
+    .grid {
+      display: grid;
+      gap: 24px;
     }
-    .input-group label {
+    .grid-2 {
+      grid-template-columns: 1fr 1fr;
+    }
+    .grid-3 {
+      grid-template-columns: repeat(3, 1fr);
+    }
+    .grid-4 {
+      grid-template-columns: repeat(4, 1fr);
+    }
+    @media (max-width: 900px) {
+      .grid-2, .grid-3, .grid-4 { grid-template-columns: 1fr; }
+    }
+    
+    /* Form Elements */
+    .form-group {
+      margin-bottom: 16px;
+    }
+    .form-group:last-child {
+      margin-bottom: 0;
+    }
+    .form-label {
       display: block;
-      font-size: 14px;
+      font-size: 12px;
       font-weight: 500;
-      margin-bottom: 8px;
+      color: var(--text-muted);
+      margin-bottom: 6px;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
     }
-    .input-row {
+    .form-row {
       display: flex;
       gap: 8px;
     }
-    input[type="text"], select {
+    input[type="text"], input[type="number"], select {
       width: 100%;
-      padding: 12px 16px;
+      padding: 12px 14px;
       background: var(--surface2);
       border: 1px solid var(--border);
       border-radius: 8px;
       color: var(--text);
       font-family: 'JetBrains Mono', monospace;
-      font-size: 16px;
-      transition: border-color 0.2s;
+      font-size: 14px;
+      transition: all 0.2s;
     }
     input:focus, select:focus {
       outline: none;
       border-color: var(--accent);
+      box-shadow: 0 0 0 3px rgba(0, 212, 170, 0.1);
     }
     input.error {
       border-color: var(--error);
     }
-    .ip-input {
-      flex: 1;
+    .input-with-suffix {
+      position: relative;
     }
-    .cidr-select {
-      width: 100px;
+    .input-suffix {
+      position: absolute;
+      right: 12px;
+      top: 50%;
+      transform: translateY(-50%);
+      color: var(--text-muted);
+      font-size: 13px;
     }
     
+    /* Buttons */
     .btn {
-      width: 100%;
-      padding: 14px 24px;
-      background: var(--gradient);
-      border: none;
+      padding: 12px 20px;
       border-radius: 8px;
-      color: #000;
       font-family: inherit;
-      font-size: 15px;
+      font-size: 14px;
       font-weight: 600;
       cursor: pointer;
-      transition: transform 0.2s, box-shadow 0.2s;
+      transition: all 0.2s;
+      border: none;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
     }
-    .btn:hover {
-      transform: translateY(-2px);
-      box-shadow: 0 10px 40px var(--accent-glow);
+    .btn-primary {
+      background: linear-gradient(135deg, var(--accent) 0%, var(--accent2) 100%);
+      color: #000;
+    }
+    .btn-primary:hover {
+      transform: translateY(-1px);
+      box-shadow: 0 4px 20px rgba(0, 212, 170, 0.3);
+    }
+    .btn-secondary {
+      background: var(--surface2);
+      color: var(--text);
+      border: 1px solid var(--border);
+    }
+    .btn-secondary:hover {
+      background: var(--surface3);
+      border-color: var(--accent);
+    }
+    .btn-sm {
+      padding: 8px 14px;
+      font-size: 13px;
+    }
+    .btn-icon {
+      width: 36px;
+      height: 36px;
+      padding: 0;
+      border-radius: 8px;
+    }
+    .btn-danger {
+      background: var(--error);
+      color: white;
     }
     
-    .results {
-      display: none;
-    }
-    .results.visible {
-      display: block;
-    }
-    .result-grid {
+    /* Result Stats */
+    .stat-grid {
       display: grid;
-      grid-template-columns: 1fr 1fr;
-      gap: 16px;
+      grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
+      gap: 12px;
     }
-    .result-item {
+    .stat {
       padding: 16px;
       background: var(--surface2);
       border-radius: 8px;
+      text-align: center;
     }
-    .result-item.full {
-      grid-column: 1 / -1;
-    }
-    .result-label {
-      font-size: 12px;
+    .stat-label {
+      font-size: 11px;
       color: var(--text-muted);
       text-transform: uppercase;
       letter-spacing: 0.5px;
       margin-bottom: 4px;
     }
-    .result-value {
+    .stat-value {
       font-family: 'JetBrains Mono', monospace;
-      font-size: 16px;
-      font-weight: 500;
-      color: var(--accent);
-    }
-    .result-value.large {
-      font-size: 24px;
-    }
-    
-    .quick-ref {
-      margin-top: 24px;
-    }
-    .quick-ref h3 {
-      font-size: 14px;
+      font-size: 15px;
       font-weight: 600;
-      margin-bottom: 12px;
-      color: var(--text-muted);
-    }
-    .cidr-table {
-      width: 100%;
-      border-collapse: collapse;
-      font-size: 13px;
-    }
-    .cidr-table th, .cidr-table td {
-      padding: 8px 12px;
-      text-align: left;
-      border-bottom: 1px solid var(--border);
-    }
-    .cidr-table th {
-      color: var(--text-muted);
-      font-weight: 500;
-    }
-    .cidr-table td {
-      font-family: 'JetBrains Mono', monospace;
-    }
-    .cidr-table tr:hover {
-      background: var(--surface2);
-    }
-    .cidr-table .clickable {
-      cursor: pointer;
       color: var(--accent);
     }
-    .cidr-table .clickable:hover {
-      text-decoration: underline;
+    .stat-value.large {
+      font-size: 20px;
+    }
+    .stat.highlight {
+      background: linear-gradient(135deg, rgba(0,212,170,0.1) 0%, rgba(59,130,246,0.1) 100%);
+      border: 1px solid rgba(0,212,170,0.2);
     }
     
+    /* Binary Display */
     .binary-display {
-      margin-top: 24px;
+      margin-top: 16px;
       padding: 16px;
-      background: var(--surface2);
+      background: var(--bg);
       border-radius: 8px;
       font-family: 'JetBrains Mono', monospace;
-      font-size: 13px;
+      font-size: 12px;
       overflow-x: auto;
     }
     .binary-row {
       display: flex;
-      gap: 16px;
-      margin-bottom: 8px;
+      gap: 12px;
+      margin-bottom: 6px;
+      align-items: center;
     }
+    .binary-row:last-child { margin-bottom: 0; }
     .binary-label {
-      width: 100px;
+      width: 90px;
       color: var(--text-muted);
       flex-shrink: 0;
+      font-size: 11px;
     }
-    .binary-value {
-      color: var(--text);
+    .binary-value .net { color: var(--accent); }
+    .binary-value .host { color: var(--accent2); }
+    
+    /* Quick Ref Table */
+    .quick-table {
+      width: 100%;
+      border-collapse: collapse;
+      font-size: 12px;
     }
-    .binary-value .network {
+    .quick-table th, .quick-table td {
+      padding: 10px 12px;
+      text-align: left;
+      border-bottom: 1px solid var(--border);
+    }
+    .quick-table th {
+      color: var(--text-muted);
+      font-weight: 500;
+      font-size: 11px;
+      text-transform: uppercase;
+    }
+    .quick-table td {
+      font-family: 'JetBrains Mono', monospace;
+    }
+    .quick-table tr:hover {
+      background: var(--surface2);
+    }
+    .quick-table .clickable {
+      cursor: pointer;
       color: var(--accent);
     }
-    .binary-value .host {
-      color: var(--accent2);
+    .quick-table .clickable:hover {
+      text-decoration: underline;
     }
     
+    /* VLSM Section */
+    .vlsm-section {
+      margin-top: 32px;
+    }
+    .vlsm-subnet {
+      display: flex;
+      gap: 12px;
+      align-items: center;
+      padding: 12px 16px;
+      background: var(--surface2);
+      border-radius: 8px;
+      margin-bottom: 8px;
+    }
+    .vlsm-subnet input {
+      flex: 1;
+    }
+    .vlsm-subnet .hosts-input {
+      width: 100px;
+    }
+    .vlsm-result {
+      padding: 12px 16px;
+      background: var(--surface2);
+      border-radius: 8px;
+      margin-bottom: 8px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+    .vlsm-result .name {
+      font-weight: 500;
+    }
+    .vlsm-result .details {
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 13px;
+      color: var(--accent);
+    }
+    .vlsm-result .hosts {
+      color: var(--text-muted);
+      font-size: 12px;
+    }
+    .vlsm-visual {
+      margin-top: 16px;
+      padding: 16px;
+      background: var(--bg);
+      border-radius: 8px;
+    }
+    .vlsm-bar {
+      height: 40px;
+      background: var(--surface2);
+      border-radius: 6px;
+      overflow: hidden;
+      display: flex;
+      margin-bottom: 8px;
+    }
+    .vlsm-segment {
+      height: 100%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 11px;
+      font-weight: 500;
+      color: #000;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      white-space: nowrap;
+      padding: 0 8px;
+      min-width: 2px;
+    }
+    .vlsm-available {
+      background: var(--surface3);
+      color: var(--text-muted);
+    }
+    .vlsm-legend {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 16px;
+      font-size: 12px;
+    }
+    .vlsm-legend-item {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+    }
+    .vlsm-legend-color {
+      width: 12px;
+      height: 12px;
+      border-radius: 3px;
+    }
+    
+    /* Tab content */
+    .tab-content {
+      display: none;
+    }
+    .tab-content.active {
+      display: block;
+    }
+    
+    /* Footer */
     footer {
       padding: 40px 0;
       border-top: 1px solid var(--border);
@@ -285,7 +464,7 @@
     }
     footer p {
       color: var(--text-muted);
-      font-size: 14px;
+      font-size: 13px;
     }
     footer a { color: var(--accent); text-decoration: none; }
   </style>
@@ -297,130 +476,256 @@
         <div class="logo-icon">📡</div>
         NetStatMan
       </a>
-      <a href="/" class="back-link">← Back to Tools</a>
+      <a href="/" class="back-link">← All Tools</a>
     </div>
   </nav>
   
   <main>
     <div class="container">
-      <h1>🧮 Subnet Calculator</h1>
-      <p class="subtitle">Calculate network details from any IP address and CIDR notation</p>
+      <div class="page-header">
+        <h1>🧮 Subnet Calculator</h1>
+        <p>Calculate subnets and plan VLSM allocations</p>
+      </div>
       
-      <div class="calculator">
-        <div>
+      <div class="tabs">
+        <button class="tab active" onclick="showTab('calculator')">Calculator</button>
+        <button class="tab" onclick="showTab('vlsm')">VLSM Planner</button>
+        <button class="tab" onclick="showTab('reference')">Reference</button>
+      </div>
+      
+      <!-- Calculator Tab -->
+      <div class="tab-content active" id="tab-calculator">
+        <div class="grid grid-2">
           <div class="card">
-            <h2>Input</h2>
-            <div class="input-group">
-              <label>IP Address / CIDR</label>
-              <div class="input-row">
-                <input type="text" id="ip-input" class="ip-input" placeholder="192.168.1.0" value="192.168.1.0">
-                <select id="cidr-select" class="cidr-select">
-                  <option value="8">/8</option>
-                  <option value="9">/9</option>
-                  <option value="10">/10</option>
-                  <option value="11">/11</option>
-                  <option value="12">/12</option>
-                  <option value="13">/13</option>
-                  <option value="14">/14</option>
-                  <option value="15">/15</option>
-                  <option value="16">/16</option>
-                  <option value="17">/17</option>
-                  <option value="18">/18</option>
-                  <option value="19">/19</option>
-                  <option value="20">/20</option>
-                  <option value="21">/21</option>
-                  <option value="22">/22</option>
-                  <option value="23">/23</option>
-                  <option value="24" selected>/24</option>
-                  <option value="25">/25</option>
-                  <option value="26">/26</option>
-                  <option value="27">/27</option>
-                  <option value="28">/28</option>
-                  <option value="29">/29</option>
-                  <option value="30">/30</option>
-                  <option value="31">/31</option>
-                  <option value="32">/32</option>
+            <div class="card-header">Input</div>
+            <div class="card-body">
+              <div class="form-group">
+                <label class="form-label">IP Address</label>
+                <input type="text" id="ip-input" placeholder="192.168.1.0" value="192.168.1.0">
+              </div>
+              <div class="form-group">
+                <label class="form-label">CIDR / Prefix Length</label>
+                <select id="cidr-select">
+                  <option value="8">/8 - 255.0.0.0</option>
+                  <option value="9">/9 - 255.128.0.0</option>
+                  <option value="10">/10 - 255.192.0.0</option>
+                  <option value="11">/11 - 255.224.0.0</option>
+                  <option value="12">/12 - 255.240.0.0</option>
+                  <option value="13">/13 - 255.248.0.0</option>
+                  <option value="14">/14 - 255.252.0.0</option>
+                  <option value="15">/15 - 255.254.0.0</option>
+                  <option value="16">/16 - 255.255.0.0</option>
+                  <option value="17">/17 - 255.255.128.0</option>
+                  <option value="18">/18 - 255.255.192.0</option>
+                  <option value="19">/19 - 255.255.224.0</option>
+                  <option value="20">/20 - 255.255.240.0</option>
+                  <option value="21">/21 - 255.255.248.0</option>
+                  <option value="22">/22 - 255.255.252.0</option>
+                  <option value="23">/23 - 255.255.254.0</option>
+                  <option value="24" selected>/24 - 255.255.255.0</option>
+                  <option value="25">/25 - 255.255.255.128</option>
+                  <option value="26">/26 - 255.255.255.192</option>
+                  <option value="27">/27 - 255.255.255.224</option>
+                  <option value="28">/28 - 255.255.255.240</option>
+                  <option value="29">/29 - 255.255.255.248</option>
+                  <option value="30">/30 - 255.255.255.252</option>
+                  <option value="31">/31 - 255.255.255.254</option>
+                  <option value="32">/32 - 255.255.255.255</option>
                 </select>
               </div>
+              <button class="btn btn-primary" style="width:100%" onclick="calculate()">Calculate</button>
             </div>
-            <button class="btn" onclick="calculate()">Calculate</button>
           </div>
           
-          <div class="quick-ref card" style="margin-top: 24px;">
-            <h2>Quick Reference</h2>
-            <table class="cidr-table">
-              <thead>
-                <tr>
-                  <th>CIDR</th>
-                  <th>Subnet Mask</th>
-                  <th>Hosts</th>
-                </tr>
-              </thead>
-              <tbody>
-                <tr><td class="clickable" onclick="setCidr(8)">/8</td><td>255.0.0.0</td><td>16,777,214</td></tr>
-                <tr><td class="clickable" onclick="setCidr(16)">/16</td><td>255.255.0.0</td><td>65,534</td></tr>
-                <tr><td class="clickable" onclick="setCidr(20)">/20</td><td>255.255.240.0</td><td>4,094</td></tr>
-                <tr><td class="clickable" onclick="setCidr(22)">/22</td><td>255.255.252.0</td><td>1,022</td></tr>
-                <tr><td class="clickable" onclick="setCidr(24)">/24</td><td>255.255.255.0</td><td>254</td></tr>
-                <tr><td class="clickable" onclick="setCidr(26)">/26</td><td>255.255.255.192</td><td>62</td></tr>
-                <tr><td class="clickable" onclick="setCidr(28)">/28</td><td>255.255.255.240</td><td>14</td></tr>
-                <tr><td class="clickable" onclick="setCidr(30)">/30</td><td>255.255.255.252</td><td>2</td></tr>
-                <tr><td class="clickable" onclick="setCidr(32)">/32</td><td>255.255.255.255</td><td>1</td></tr>
-              </tbody>
-            </table>
-          </div>
-        </div>
-        
-        <div>
-          <div class="card results" id="results">
-            <h2>Results</h2>
-            <div class="result-grid">
-              <div class="result-item full">
-                <div class="result-label">Network</div>
-                <div class="result-value large" id="result-network">-</div>
+          <div class="card">
+            <div class="card-header">Results</div>
+            <div class="card-body">
+              <div class="stat-grid">
+                <div class="stat highlight" style="grid-column: 1 / -1;">
+                  <div class="stat-label">Network</div>
+                  <div class="stat-value large" id="r-network">192.168.1.0/24</div>
+                </div>
+                <div class="stat">
+                  <div class="stat-label">Subnet Mask</div>
+                  <div class="stat-value" id="r-mask">255.255.255.0</div>
+                </div>
+                <div class="stat">
+                  <div class="stat-label">Wildcard</div>
+                  <div class="stat-value" id="r-wildcard">0.0.0.255</div>
+                </div>
+                <div class="stat">
+                  <div class="stat-label">Broadcast</div>
+                  <div class="stat-value" id="r-broadcast">192.168.1.255</div>
+                </div>
+                <div class="stat">
+                  <div class="stat-label">Total IPs</div>
+                  <div class="stat-value" id="r-total">256</div>
+                </div>
+                <div class="stat">
+                  <div class="stat-label">First Usable</div>
+                  <div class="stat-value" id="r-first">192.168.1.1</div>
+                </div>
+                <div class="stat">
+                  <div class="stat-label">Last Usable</div>
+                  <div class="stat-value" id="r-last">192.168.1.254</div>
+                </div>
+                <div class="stat highlight" style="grid-column: 1 / -1;">
+                  <div class="stat-label">Usable Hosts</div>
+                  <div class="stat-value large" id="r-usable">254</div>
+                </div>
               </div>
-              <div class="result-item">
-                <div class="result-label">Subnet Mask</div>
-                <div class="result-value" id="result-mask">-</div>
-              </div>
-              <div class="result-item">
-                <div class="result-label">Wildcard Mask</div>
-                <div class="result-value" id="result-wildcard">-</div>
-              </div>
-              <div class="result-item">
-                <div class="result-label">Broadcast Address</div>
-                <div class="result-value" id="result-broadcast">-</div>
-              </div>
-              <div class="result-item">
-                <div class="result-label">Total Addresses</div>
-                <div class="result-value" id="result-total">-</div>
-              </div>
-              <div class="result-item">
-                <div class="result-label">First Usable</div>
-                <div class="result-value" id="result-first">-</div>
-              </div>
-              <div class="result-item">
-                <div class="result-label">Last Usable</div>
-                <div class="result-value" id="result-last">-</div>
-              </div>
-              <div class="result-item full">
-                <div class="result-label">Usable Hosts</div>
-                <div class="result-value large" id="result-usable">-</div>
+              
+              <div class="binary-display">
+                <div class="binary-row">
+                  <span class="binary-label">IP Address</span>
+                  <span class="binary-value" id="b-ip"></span>
+                </div>
+                <div class="binary-row">
+                  <span class="binary-label">Subnet Mask</span>
+                  <span class="binary-value" id="b-mask"></span>
+                </div>
+                <div class="binary-row">
+                  <span class="binary-label">Network</span>
+                  <span class="binary-value" id="b-network"></span>
+                </div>
               </div>
             </div>
-            
-            <div class="binary-display" id="binary-display">
-              <div class="binary-row">
-                <span class="binary-label">IP Address:</span>
-                <span class="binary-value" id="binary-ip">-</span>
+          </div>
+        </div>
+      </div>
+      
+      <!-- VLSM Tab -->
+      <div class="tab-content" id="tab-vlsm">
+        <div class="grid grid-2">
+          <div class="card">
+            <div class="card-header">VLSM Planner</div>
+            <div class="card-body">
+              <div class="form-group">
+                <label class="form-label">Parent Network</label>
+                <input type="text" id="vlsm-parent" placeholder="10.0.0.0/16" value="10.0.0.0/16">
               </div>
-              <div class="binary-row">
-                <span class="binary-label">Subnet Mask:</span>
-                <span class="binary-value" id="binary-mask">-</span>
+              
+              <div class="form-group">
+                <label class="form-label">Subnets Needed</label>
+                <div id="vlsm-subnets">
+                  <div class="vlsm-subnet">
+                    <input type="text" placeholder="Name (e.g. Users)" class="vlsm-name">
+                    <input type="number" placeholder="Hosts" class="hosts-input vlsm-hosts" min="1">
+                    <button class="btn btn-icon btn-secondary" onclick="removeSubnet(this)" title="Remove">✕</button>
+                  </div>
+                </div>
+                <button class="btn btn-secondary btn-sm" onclick="addSubnet()" style="margin-top: 8px;">+ Add Subnet</button>
               </div>
-              <div class="binary-row">
-                <span class="binary-label">Network:</span>
-                <span class="binary-value" id="binary-network">-</span>
+              
+              <button class="btn btn-primary" style="width:100%; margin-top: 16px;" onclick="calculateVLSM()">Calculate VLSM</button>
+            </div>
+          </div>
+          
+          <div class="card">
+            <div class="card-header">Allocation Results</div>
+            <div class="card-body">
+              <div id="vlsm-results">
+                <p style="color: var(--text-muted); text-align: center; padding: 40px 0;">
+                  Add subnets and click Calculate
+                </p>
+              </div>
+              
+              <div class="vlsm-visual" id="vlsm-visual" style="display: none;">
+                <div class="vlsm-bar" id="vlsm-bar"></div>
+                <div class="vlsm-legend" id="vlsm-legend"></div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      
+      <!-- Reference Tab -->
+      <div class="tab-content" id="tab-reference">
+        <div class="grid grid-2">
+          <div class="card">
+            <div class="card-header">CIDR Reference</div>
+            <div class="card-body">
+              <table class="quick-table">
+                <thead>
+                  <tr>
+                    <th>CIDR</th>
+                    <th>Subnet Mask</th>
+                    <th>Usable Hosts</th>
+                    <th>Total IPs</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr><td class="clickable" onclick="quickCalc(8)">/8</td><td>255.0.0.0</td><td>16,777,214</td><td>16,777,216</td></tr>
+                  <tr><td class="clickable" onclick="quickCalc(12)">/12</td><td>255.240.0.0</td><td>1,048,574</td><td>1,048,576</td></tr>
+                  <tr><td class="clickable" onclick="quickCalc(16)">/16</td><td>255.255.0.0</td><td>65,534</td><td>65,536</td></tr>
+                  <tr><td class="clickable" onclick="quickCalc(20)">/20</td><td>255.255.240.0</td><td>4,094</td><td>4,096</td></tr>
+                  <tr><td class="clickable" onclick="quickCalc(22)">/22</td><td>255.255.252.0</td><td>1,022</td><td>1,024</td></tr>
+                  <tr><td class="clickable" onclick="quickCalc(24)">/24</td><td>255.255.255.0</td><td>254</td><td>256</td></tr>
+                  <tr><td class="clickable" onclick="quickCalc(25)">/25</td><td>255.255.255.128</td><td>126</td><td>128</td></tr>
+                  <tr><td class="clickable" onclick="quickCalc(26)">/26</td><td>255.255.255.192</td><td>62</td><td>64</td></tr>
+                  <tr><td class="clickable" onclick="quickCalc(27)">/27</td><td>255.255.255.224</td><td>30</td><td>32</td></tr>
+                  <tr><td class="clickable" onclick="quickCalc(28)">/28</td><td>255.255.255.240</td><td>14</td><td>16</td></tr>
+                  <tr><td class="clickable" onclick="quickCalc(29)">/29</td><td>255.255.255.248</td><td>6</td><td>8</td></tr>
+                  <tr><td class="clickable" onclick="quickCalc(30)">/30</td><td>255.255.255.252</td><td>2</td><td>4</td></tr>
+                  <tr><td class="clickable" onclick="quickCalc(31)">/31</td><td>255.255.255.254</td><td>2</td><td>2</td></tr>
+                  <tr><td class="clickable" onclick="quickCalc(32)">/32</td><td>255.255.255.255</td><td>1</td><td>1</td></tr>
+                </tbody>
+              </table>
+            </div>
+          </div>
+          
+          <div class="card">
+            <div class="card-header">Private IP Ranges (RFC 1918)</div>
+            <div class="card-body">
+              <table class="quick-table">
+                <thead>
+                  <tr>
+                    <th>Class</th>
+                    <th>Range</th>
+                    <th>CIDR</th>
+                    <th>Addresses</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr>
+                    <td>A</td>
+                    <td class="clickable" onclick="setIP('10.0.0.0', 8)">10.0.0.0 - 10.255.255.255</td>
+                    <td>/8</td>
+                    <td>16.7M</td>
+                  </tr>
+                  <tr>
+                    <td>B</td>
+                    <td class="clickable" onclick="setIP('172.16.0.0', 12)">172.16.0.0 - 172.31.255.255</td>
+                    <td>/12</td>
+                    <td>1.04M</td>
+                  </tr>
+                  <tr>
+                    <td>C</td>
+                    <td class="clickable" onclick="setIP('192.168.0.0', 16)">192.168.0.0 - 192.168.255.255</td>
+                    <td>/16</td>
+                    <td>65.5K</td>
+                  </tr>
+                </tbody>
+              </table>
+              
+              <div style="margin-top: 24px;">
+                <div class="card-header" style="padding: 0 0 12px 0; border: none;">Special Ranges</div>
+                <table class="quick-table">
+                  <tbody>
+                    <tr>
+                      <td>Loopback</td>
+                      <td class="clickable" onclick="setIP('127.0.0.1', 8)">127.0.0.0/8</td>
+                    </tr>
+                    <tr>
+                      <td>Link-Local</td>
+                      <td class="clickable" onclick="setIP('169.254.0.0', 16)">169.254.0.0/16</td>
+                    </tr>
+                    <tr>
+                      <td>CGNAT</td>
+                      <td class="clickable" onclick="setIP('100.64.0.0', 10)">100.64.0.0/10</td>
+                    </tr>
+                  </tbody>
+                </table>
               </div>
             </div>
           </div>
@@ -431,23 +736,19 @@
   
   <footer>
     <div class="container">
-      <p>© 2026 <a href="/">NetStatMan</a>. Free tools for network professionals.</p>
+      <p>© 2026 <a href="/">NetStatMan</a> — Free tools for network professionals</p>
     </div>
   </footer>
   
   <script>
+    // Utility functions
     function ipToInt(ip) {
-      const parts = ip.split('.').map(Number);
-      return ((parts[0] << 24) | (parts[1] << 16) | (parts[2] << 8) | parts[3]) >>> 0;
+      const p = ip.split('.').map(Number);
+      return ((p[0] << 24) | (p[1] << 16) | (p[2] << 8) | p[3]) >>> 0;
     }
     
     function intToIp(int) {
-      return [
-        (int >>> 24) & 255,
-        (int >>> 16) & 255,
-        (int >>> 8) & 255,
-        int & 255
-      ].join('.');
+      return [(int >>> 24) & 255, (int >>> 16) & 255, (int >>> 8) & 255, int & 255].join('.');
     }
     
     function intToBinary(int) {
@@ -455,91 +756,229 @@
     }
     
     function isValidIp(ip) {
-      const parts = ip.split('.');
-      if (parts.length !== 4) return false;
-      return parts.every(p => {
-        const n = Number(p);
-        return !isNaN(n) && n >= 0 && n <= 255 && p === String(n);
-      });
+      const p = ip.split('.');
+      if (p.length !== 4) return false;
+      return p.every(x => { const n = Number(x); return !isNaN(n) && n >= 0 && n <= 255 && x === String(n); });
     }
     
-    function setCidr(cidr) {
-      document.getElementById('cidr-select').value = cidr;
-      calculate();
+    function hostsToPrefix(hosts) {
+      // Find smallest prefix that can fit 'hosts' usable addresses
+      for (let p = 30; p >= 0; p--) {
+        const usable = p <= 30 ? Math.pow(2, 32 - p) - 2 : Math.pow(2, 32 - p);
+        if (usable >= hosts) return p;
+      }
+      return 0;
     }
     
+    // Tab switching
+    function showTab(tab) {
+      document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
+      document.querySelectorAll('.tab-content').forEach(t => t.classList.remove('active'));
+      document.querySelector(`[onclick="showTab('${tab}')"]`).classList.add('active');
+      document.getElementById('tab-' + tab).classList.add('active');
+    }
+    
+    // Calculator
     function calculate() {
       const ipInput = document.getElementById('ip-input');
-      const ip = ipInput.value.trim();
-      const cidr = parseInt(document.getElementById('cidr-select').value);
+      let ip = ipInput.value.trim();
       
-      // Handle CIDR notation in input
-      let actualIp = ip;
+      // Handle CIDR in input
       if (ip.includes('/')) {
-        const parts = ip.split('/');
-        actualIp = parts[0];
-        const inputCidr = parseInt(parts[1]);
-        if (!isNaN(inputCidr) && inputCidr >= 0 && inputCidr <= 32) {
-          document.getElementById('cidr-select').value = inputCidr;
+        const [addr, cidr] = ip.split('/');
+        ip = addr;
+        const c = parseInt(cidr);
+        if (!isNaN(c) && c >= 0 && c <= 32) {
+          document.getElementById('cidr-select').value = c;
         }
       }
       
-      if (!isValidIp(actualIp)) {
+      if (!isValidIp(ip)) {
         ipInput.classList.add('error');
         return;
       }
       ipInput.classList.remove('error');
-      ipInput.value = actualIp;
+      ipInput.value = ip;
       
-      const cidrVal = parseInt(document.getElementById('cidr-select').value);
-      const ipInt = ipToInt(actualIp);
-      const maskInt = cidrVal === 0 ? 0 : (0xFFFFFFFF << (32 - cidrVal)) >>> 0;
+      const cidr = parseInt(document.getElementById('cidr-select').value);
+      const ipInt = ipToInt(ip);
+      const maskInt = cidr === 0 ? 0 : (0xFFFFFFFF << (32 - cidr)) >>> 0;
       const wildcardInt = ~maskInt >>> 0;
       const networkInt = (ipInt & maskInt) >>> 0;
       const broadcastInt = (networkInt | wildcardInt) >>> 0;
-      const totalAddresses = Math.pow(2, 32 - cidrVal);
-      const usableHosts = cidrVal >= 31 ? totalAddresses : totalAddresses - 2;
-      const firstUsable = cidrVal >= 31 ? networkInt : networkInt + 1;
-      const lastUsable = cidrVal >= 31 ? broadcastInt : broadcastInt - 1;
+      const total = Math.pow(2, 32 - cidr);
+      const usable = cidr >= 31 ? total : total - 2;
+      const first = cidr >= 31 ? networkInt : networkInt + 1;
+      const last = cidr >= 31 ? broadcastInt : broadcastInt - 1;
       
-      // Update results
-      document.getElementById('result-network').textContent = intToIp(networkInt) + '/' + cidrVal;
-      document.getElementById('result-mask').textContent = intToIp(maskInt);
-      document.getElementById('result-wildcard').textContent = intToIp(wildcardInt);
-      document.getElementById('result-broadcast').textContent = intToIp(broadcastInt);
-      document.getElementById('result-total').textContent = totalAddresses.toLocaleString();
-      document.getElementById('result-first').textContent = intToIp(firstUsable);
-      document.getElementById('result-last').textContent = intToIp(lastUsable);
-      document.getElementById('result-usable').textContent = usableHosts.toLocaleString();
+      document.getElementById('r-network').textContent = intToIp(networkInt) + '/' + cidr;
+      document.getElementById('r-mask').textContent = intToIp(maskInt);
+      document.getElementById('r-wildcard').textContent = intToIp(wildcardInt);
+      document.getElementById('r-broadcast').textContent = intToIp(broadcastInt);
+      document.getElementById('r-total').textContent = total.toLocaleString();
+      document.getElementById('r-first').textContent = intToIp(first);
+      document.getElementById('r-last').textContent = intToIp(last);
+      document.getElementById('r-usable').textContent = usable.toLocaleString();
       
-      // Update binary display with coloring
-      const ipBinary = intToBinary(ipInt);
-      const maskBinary = intToBinary(maskInt);
-      const networkBinary = intToBinary(networkInt);
-      
-      // Color the network and host portions
-      const binaryIp = document.getElementById('binary-ip');
-      const binaryChars = ipBinary.replace(/\./g, '');
-      let coloredBinary = '';
+      // Binary display
+      const binary = intToBinary(ipInt).replace(/\./g, '');
+      let html = '';
       for (let i = 0; i < 32; i++) {
-        if (i > 0 && i % 8 === 0) coloredBinary += '.';
-        coloredBinary += i < cidrVal 
-          ? `<span class="network">${binaryChars[i]}</span>`
-          : `<span class="host">${binaryChars[i]}</span>`;
+        if (i > 0 && i % 8 === 0) html += '.';
+        html += `<span class="${i < cidr ? 'net' : 'host'}">${binary[i]}</span>`;
       }
-      binaryIp.innerHTML = coloredBinary;
-      document.getElementById('binary-mask').textContent = maskBinary;
-      document.getElementById('binary-network').textContent = networkBinary;
-      
-      document.getElementById('results').classList.add('visible');
+      document.getElementById('b-ip').innerHTML = html;
+      document.getElementById('b-mask').textContent = intToBinary(maskInt);
+      document.getElementById('b-network').textContent = intToBinary(networkInt);
     }
     
-    // Calculate on Enter key
-    document.getElementById('ip-input').addEventListener('keypress', (e) => {
-      if (e.key === 'Enter') calculate();
-    });
+    function quickCalc(cidr) {
+      document.getElementById('cidr-select').value = cidr;
+      calculate();
+      showTab('calculator');
+    }
     
-    // Auto-calculate on CIDR change
+    function setIP(ip, cidr) {
+      document.getElementById('ip-input').value = ip;
+      document.getElementById('cidr-select').value = cidr;
+      calculate();
+      showTab('calculator');
+    }
+    
+    // VLSM
+    function addSubnet() {
+      const container = document.getElementById('vlsm-subnets');
+      const div = document.createElement('div');
+      div.className = 'vlsm-subnet';
+      div.innerHTML = `
+        <input type="text" placeholder="Name (e.g. Servers)" class="vlsm-name">
+        <input type="number" placeholder="Hosts" class="hosts-input vlsm-hosts" min="1">
+        <button class="btn btn-icon btn-secondary" onclick="removeSubnet(this)" title="Remove">✕</button>
+      `;
+      container.appendChild(div);
+    }
+    
+    function removeSubnet(btn) {
+      const container = document.getElementById('vlsm-subnets');
+      if (container.children.length > 1) {
+        btn.parentElement.remove();
+      }
+    }
+    
+    const colors = ['#00d4aa', '#3b82f6', '#8b5cf6', '#f59e0b', '#ef4444', '#ec4899', '#06b6d4', '#84cc16'];
+    
+    function calculateVLSM() {
+      const parentInput = document.getElementById('vlsm-parent').value.trim();
+      const match = parentInput.match(/^(\d+\.\d+\.\d+\.\d+)\/(\d+)$/);
+      if (!match || !isValidIp(match[1])) {
+        alert('Invalid parent network. Use format: 10.0.0.0/16');
+        return;
+      }
+      
+      const parentIp = match[1];
+      const parentCidr = parseInt(match[2]);
+      const parentInt = ipToInt(parentIp);
+      const parentMask = parentCidr === 0 ? 0 : (0xFFFFFFFF << (32 - parentCidr)) >>> 0;
+      const parentNetwork = (parentInt & parentMask) >>> 0;
+      const parentSize = Math.pow(2, 32 - parentCidr);
+      
+      // Collect subnets
+      const subnets = [];
+      document.querySelectorAll('.vlsm-subnet').forEach(row => {
+        const name = row.querySelector('.vlsm-name').value.trim() || 'Unnamed';
+        const hosts = parseInt(row.querySelector('.vlsm-hosts').value) || 0;
+        if (hosts > 0) {
+          subnets.push({ name, hosts, prefix: hostsToPrefix(hosts) });
+        }
+      });
+      
+      if (subnets.length === 0) {
+        alert('Add at least one subnet with hosts');
+        return;
+      }
+      
+      // Sort by size (largest first for efficient packing)
+      subnets.sort((a, b) => a.prefix - b.prefix);
+      
+      // Allocate
+      let currentAddr = parentNetwork;
+      const allocations = [];
+      let totalUsed = 0;
+      
+      for (const subnet of subnets) {
+        const size = Math.pow(2, 32 - subnet.prefix);
+        const usable = subnet.prefix >= 31 ? size : size - 2;
+        
+        // Align to subnet boundary
+        const alignMask = (0xFFFFFFFF << (32 - subnet.prefix)) >>> 0;
+        if ((currentAddr & alignMask) !== currentAddr) {
+          currentAddr = ((currentAddr & alignMask) >>> 0) + size;
+        }
+        
+        if (currentAddr + size > parentNetwork + parentSize) {
+          allocations.push({ name: subnet.name, error: 'Does not fit!' });
+          continue;
+        }
+        
+        allocations.push({
+          name: subnet.name,
+          network: intToIp(currentAddr),
+          prefix: subnet.prefix,
+          usable,
+          size,
+          start: currentAddr - parentNetwork
+        });
+        
+        totalUsed += size;
+        currentAddr += size;
+      }
+      
+      // Render results
+      let html = '';
+      allocations.forEach((a, i) => {
+        if (a.error) {
+          html += `<div class="vlsm-result" style="border-left: 3px solid var(--error);">
+            <div><span class="name">${a.name}</span></div>
+            <div class="details" style="color: var(--error);">${a.error}</div>
+          </div>`;
+        } else {
+          html += `<div class="vlsm-result" style="border-left: 3px solid ${colors[i % colors.length]};">
+            <div><span class="name">${a.name}</span> <span class="hosts">(${a.usable} usable)</span></div>
+            <div class="details">${a.network}/${a.prefix}</div>
+          </div>`;
+        }
+      });
+      
+      const remaining = parentSize - totalUsed;
+      html += `<div class="vlsm-result" style="border-left: 3px solid var(--surface3);">
+        <div><span class="name" style="color: var(--text-muted);">Available</span></div>
+        <div class="details" style="color: var(--text-muted);">${remaining.toLocaleString()} addresses</div>
+      </div>`;
+      
+      document.getElementById('vlsm-results').innerHTML = html;
+      
+      // Render visual bar
+      let barHtml = '';
+      let legendHtml = '';
+      allocations.filter(a => !a.error).forEach((a, i) => {
+        const pct = (a.size / parentSize * 100).toFixed(2);
+        barHtml += `<div class="vlsm-segment" style="width: ${pct}%; background: ${colors[i % colors.length]};">${pct > 5 ? a.name : ''}</div>`;
+        legendHtml += `<div class="vlsm-legend-item"><div class="vlsm-legend-color" style="background: ${colors[i % colors.length]};"></div>${a.name}</div>`;
+      });
+      
+      if (remaining > 0) {
+        const pct = (remaining / parentSize * 100).toFixed(2);
+        barHtml += `<div class="vlsm-segment vlsm-available" style="width: ${pct}%;">${pct > 10 ? 'Available' : ''}</div>`;
+        legendHtml += `<div class="vlsm-legend-item"><div class="vlsm-legend-color" style="background: var(--surface3);"></div>Available</div>`;
+      }
+      
+      document.getElementById('vlsm-bar').innerHTML = barHtml;
+      document.getElementById('vlsm-legend').innerHTML = legendHtml;
+      document.getElementById('vlsm-visual').style.display = 'block';
+    }
+    
+    // Event listeners
+    document.getElementById('ip-input').addEventListener('keypress', e => { if (e.key === 'Enter') calculate(); });
     document.getElementById('cidr-select').addEventListener('change', calculate);
     
     // Initial calculation
