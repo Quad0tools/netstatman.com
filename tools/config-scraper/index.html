@@ -3,11 +3,11 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Config Scraper — NetStatMan</title>
-  <meta name="description" content="Automatically backup network device configurations from Cisco, Juniper, Palo Alto, Arista, and UniFi with Git version control.">
+  <title>Config Scraper — Network Configuration Backup Tool | NetStatMan</title>
+  <meta name="description" content="Free network configuration backup tool with Git version control. Supports Cisco, Juniper, Palo Alto, Arista, and UniFi devices.">
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
   <style>
     *, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
     
@@ -20,8 +20,8 @@
       --text-muted: #71717a;
       --accent: #00d4aa;
       --accent2: #3b82f6;
-      --accent-glow: rgba(0, 212, 170, 0.2);
       --gradient: linear-gradient(135deg, #00d4aa 0%, #3b82f6 100%);
+      --mono: 'JetBrains Mono', monospace;
     }
     
     body {
@@ -31,16 +31,14 @@
       line-height: 1.6;
     }
     
-    .container {
-      max-width: 900px;
-      margin: 0 auto;
-      padding: 0 24px;
-    }
+    .container { max-width: 900px; margin: 0 auto; padding: 0 24px; }
     
+    /* Nav */
     nav {
-      padding: 20px 0;
+      padding: 16px 0;
+      background: rgba(10,10,15,0.9);
+      backdrop-filter: blur(20px);
       border-bottom: 1px solid var(--border);
-      background: rgba(10,10,15,0.95);
       position: fixed;
       top: 0; left: 0; right: 0;
       z-index: 100;
@@ -49,39 +47,46 @@
       display: flex;
       align-items: center;
       justify-content: space-between;
-      max-width: 1200px;
     }
     .logo {
       display: flex;
       align-items: center;
       gap: 12px;
       font-weight: 700;
-      font-size: 20px;
+      font-size: 18px;
       text-decoration: none;
       color: var(--text);
     }
     .logo-icon {
-      width: 40px; height: 40px;
+      width: 36px;
+      height: 36px;
       background: var(--gradient);
-      border-radius: 10px;
+      border-radius: 8px;
       display: flex;
       align-items: center;
       justify-content: center;
-      font-size: 20px;
+      font-size: 18px;
     }
-    .back-link {
+    .back {
       color: var(--text-muted);
       text-decoration: none;
       font-size: 14px;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      transition: color 0.2s;
     }
-    .back-link:hover { color: var(--accent); }
+    .back:hover { color: var(--accent); }
     
+    /* Hero */
     .hero {
       padding: 140px 0 60px;
       text-align: center;
     }
-    .tool-icon {
-      width: 80px; height: 80px;
+    .hero-icon {
+      width: 80px;
+      height: 80px;
+      margin: 0 auto 24px;
       background: var(--surface);
       border: 1px solid var(--border);
       border-radius: 20px;
@@ -89,12 +94,16 @@
       align-items: center;
       justify-content: center;
       font-size: 40px;
-      margin: 0 auto 24px;
     }
     .hero h1 {
       font-size: 42px;
-      font-weight: 700;
+      font-weight: 800;
       margin-bottom: 16px;
+    }
+    .hero h1 span {
+      background: var(--gradient);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
     }
     .hero p {
       font-size: 18px;
@@ -102,29 +111,25 @@
       max-width: 600px;
       margin: 0 auto 32px;
     }
-    .version {
-      display: inline-block;
-      padding: 4px 12px;
-      background: var(--surface);
-      border: 1px solid var(--border);
-      border-radius: 20px;
-      font-size: 13px;
-      color: var(--text-muted);
-      margin-bottom: 24px;
+    .hero-buttons {
+      display: flex;
+      gap: 12px;
+      justify-content: center;
+      flex-wrap: wrap;
     }
     
     .btn {
-      padding: 16px 32px;
+      padding: 14px 28px;
       border-radius: 8px;
       font-family: inherit;
-      font-size: 16px;
+      font-size: 15px;
       font-weight: 600;
       text-decoration: none;
       cursor: pointer;
       transition: all 0.2s;
       display: inline-flex;
       align-items: center;
-      gap: 10px;
+      gap: 8px;
       border: none;
     }
     .btn-primary {
@@ -133,39 +138,46 @@
     }
     .btn-primary:hover {
       transform: translateY(-2px);
-      box-shadow: 0 10px 40px var(--accent-glow);
+      box-shadow: 0 10px 40px rgba(0,212,170,0.2);
     }
     .btn-secondary {
       background: var(--surface);
       color: var(--text);
       border: 1px solid var(--border);
-      padding: 14px 24px;
-      font-size: 14px;
     }
     .btn-secondary:hover {
       border-color: var(--accent);
     }
     
-    .download-buttons {
-      display: flex;
-      gap: 16px;
-      justify-content: center;
-      flex-wrap: wrap;
+    /* Screenshot */
+    .screenshot {
+      margin: 40px 0 60px;
+      border-radius: 12px;
+      border: 1px solid var(--border);
+      overflow: hidden;
+      box-shadow: 0 20px 60px rgba(0,0,0,0.4);
+    }
+    .screenshot img {
+      width: 100%;
+      display: block;
     }
     
+    /* Features */
     .section {
       padding: 60px 0;
-      border-top: 1px solid var(--border);
     }
-    .section h2 {
+    .section-title {
       font-size: 24px;
-      font-weight: 600;
+      font-weight: 700;
       margin-bottom: 24px;
+      display: flex;
+      align-items: center;
+      gap: 12px;
     }
     
     .features-grid {
       display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+      grid-template-columns: repeat(2, 1fr);
       gap: 20px;
     }
     .feature-card {
@@ -183,75 +195,121 @@
       gap: 10px;
     }
     .feature-card p {
-      color: var(--text-muted);
       font-size: 14px;
+      color: var(--text-muted);
+      line-height: 1.6;
     }
     
-    .vendor-list {
+    /* Vendors */
+    .vendors {
       display: flex;
+      gap: 16px;
       flex-wrap: wrap;
-      gap: 12px;
+      justify-content: center;
+      margin: 24px 0;
     }
     .vendor {
-      padding: 10px 16px;
+      padding: 12px 20px;
       background: var(--surface);
       border: 1px solid var(--border);
       border-radius: 8px;
       font-size: 14px;
       font-weight: 500;
+      display: flex;
+      align-items: center;
+      gap: 8px;
     }
     
-    .screenshot {
-      background: var(--surface);
-      border: 1px solid var(--border);
-      border-radius: 12px;
-      overflow: hidden;
-      margin: 24px 0;
-    }
-    .screenshot img {
-      width: 100%;
-      display: block;
-    }
-    .screenshot-placeholder {
-      padding: 100px 40px;
-      text-align: center;
-      color: var(--text-muted);
-      font-size: 14px;
-    }
-    
+    /* Requirements */
     .requirements {
       background: var(--surface);
       border: 1px solid var(--border);
       border-radius: 12px;
       padding: 24px;
+      margin: 24px 0;
+    }
+    .requirements h3 {
+      font-size: 16px;
+      font-weight: 600;
+      margin-bottom: 16px;
     }
     .requirements ul {
       list-style: none;
-      color: var(--text-muted);
-      font-size: 14px;
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 8px;
     }
     .requirements li {
-      padding: 8px 0;
+      font-size: 14px;
+      color: var(--text-muted);
       display: flex;
       align-items: center;
-      gap: 10px;
+      gap: 8px;
     }
     .requirements li::before {
       content: '✓';
       color: var(--accent);
-      font-weight: bold;
+      font-weight: 700;
     }
     
+    /* Code block */
+    .code-block {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      padding: 16px 20px;
+      font-family: var(--mono);
+      font-size: 14px;
+      overflow-x: auto;
+      margin: 16px 0;
+    }
+    .code-block .comment { color: var(--text-muted); }
+    .code-block .cmd { color: var(--accent); }
+    
+    /* Download section */
+    .download-section {
+      background: linear-gradient(135deg, rgba(0,212,170,0.1) 0%, rgba(59,130,246,0.1) 100%);
+      border: 1px solid var(--border);
+      border-radius: 16px;
+      padding: 40px;
+      text-align: center;
+      margin: 40px 0;
+    }
+    .download-section h2 {
+      font-size: 28px;
+      font-weight: 700;
+      margin-bottom: 12px;
+    }
+    .download-section p {
+      color: var(--text-muted);
+      margin-bottom: 24px;
+    }
+    .version-badge {
+      display: inline-block;
+      padding: 4px 12px;
+      background: var(--surface2);
+      border-radius: 20px;
+      font-size: 12px;
+      font-weight: 500;
+      margin-left: 8px;
+      color: var(--text-muted);
+    }
+    
+    /* Footer */
     footer {
       padding: 40px 0;
       border-top: 1px solid var(--border);
       text-align: center;
-    }
-    footer p {
-      color: var(--text-muted);
       font-size: 14px;
+      color: var(--text-muted);
     }
     footer a { color: var(--accent); text-decoration: none; }
+    
+    @media (max-width: 768px) {
+      .features-grid { grid-template-columns: 1fr; }
+      .requirements ul { grid-template-columns: 1fr; }
+      .hero h1 { font-size: 32px; }
+    }
   </style>
 </head>
 <body>
@@ -261,104 +319,119 @@
         <div class="logo-icon">📡</div>
         NetStatMan
       </a>
-      <a href="/" class="back-link">← Back to Tools</a>
+      <a href="/" class="back">← All Tools</a>
     </div>
   </nav>
   
   <section class="hero">
     <div class="container">
-      <div class="tool-icon">🔧</div>
-      <span class="version">v1.0.0</span>
-      <h1>Config Scraper</h1>
-      <p>Automatically backup network device configurations with Git version control. Track every change, restore any version.</p>
-      
-      <div class="download-buttons">
-        <a href="#" class="btn btn-primary" id="download-btn">
-          <span>⬇️</span> Download for Windows
+      <div class="hero-icon">🔧</div>
+      <h1>Config <span>Scraper</span></h1>
+      <p>Automatically backup network device configurations from all major vendors. Git version control tracks every change.</p>
+      <div class="hero-buttons">
+        <a href="https://github.com/Quad0tools/config-scraper/releases/latest" class="btn btn-primary">
+          <span>📥</span> Download for Windows
         </a>
-        <a href="https://github.com/netstatman/config-scraper" class="btn btn-secondary" target="_blank">
-          <span>📂</span> View Source
+        <a href="https://github.com/Quad0tools/config-scraper" class="btn btn-secondary" target="_blank">
+          <span>⭐</span> View on GitHub
         </a>
       </div>
     </div>
   </section>
   
-  <section class="section">
-    <div class="container">
-      <h2>Features</h2>
+  <div class="container">
+    <div class="screenshot">
+      <img src="/assets/screenshots/config-scraper-full.png" alt="Config Scraper Screenshot">
+    </div>
+    
+    <section class="section">
+      <h2 class="section-title">🏢 Supported Vendors</h2>
+      <div class="vendors">
+        <div class="vendor">🔵 Cisco IOS</div>
+        <div class="vendor">🔵 Cisco NX-OS</div>
+        <div class="vendor">🔵 Cisco ASA</div>
+        <div class="vendor">🟢 Juniper JunOS</div>
+        <div class="vendor">🟠 Palo Alto PAN-OS</div>
+        <div class="vendor">⚪ Arista EOS</div>
+        <div class="vendor">🔷 UniFi Network</div>
+        <div class="vendor">⬜ Generic SSH</div>
+      </div>
+    </section>
+    
+    <section class="section">
+      <h2 class="section-title">✨ Features</h2>
       <div class="features-grid">
         <div class="feature-card">
-          <h3>🔄 Auto Backup</h3>
-          <p>Schedule automatic config backups at any interval. Never lose a config change again.</p>
+          <h3>🔐 SSH-Based Collection</h3>
+          <p>Secure connections to your devices using SSH. Supports password and key-based authentication.</p>
         </div>
         <div class="feature-card">
           <h3>📊 Git Version Control</h3>
-          <p>Every config change is committed to a local Git repo with timestamps and diffs.</p>
+          <p>Every config backup is automatically committed to a local Git repo. See exactly what changed and when.</p>
         </div>
         <div class="feature-card">
-          <h3>🔐 Encrypted Credentials</h3>
-          <p>Device passwords stored securely using Windows DPAPI encryption.</p>
+          <h3>⏰ Scheduled Backups</h3>
+          <p>Configure hourly, daily, or weekly backup schedules. Never miss a config change.</p>
         </div>
         <div class="feature-card">
           <h3>📋 Bulk Import</h3>
-          <p>Add dozens of devices at once with shared credentials. Perfect for large deployments.</p>
+          <p>Import dozens of devices at once via CSV. Get up and running in minutes.</p>
         </div>
         <div class="feature-card">
-          <h3>🌐 Web Interface</h3>
-          <p>Clean, modern UI accessible from any browser on your network.</p>
+          <h3>🔍 Config Viewer</h3>
+          <p>Built-in viewer with syntax highlighting. Compare versions side-by-side.</p>
         </div>
         <div class="feature-card">
-          <h3>📈 Diff Viewer</h3>
-          <p>Visual comparison of config changes with syntax highlighting.</p>
+          <h3>📈 Change History</h3>
+          <p>Track config changes over time. See who changed what (when paired with your change management).</p>
         </div>
       </div>
-    </div>
-  </section>
-  
-  <section class="section">
-    <div class="container">
-      <h2>Supported Vendors</h2>
-      <div class="vendor-list">
-        <span class="vendor">Cisco IOS</span>
-        <span class="vendor">Cisco NX-OS</span>
-        <span class="vendor">Cisco ASA</span>
-        <span class="vendor">Juniper</span>
-        <span class="vendor">Palo Alto</span>
-        <span class="vendor">Arista</span>
-        <span class="vendor">UniFi</span>
-        <span class="vendor">Generic SSH</span>
-      </div>
-    </div>
-  </section>
-  
-  <section class="section">
-    <div class="container">
-      <h2>Screenshot</h2>
-      <div class="screenshot">
-        <div class="screenshot-placeholder">
-          📸 Screenshot coming soon
-        </div>
-      </div>
-    </div>
-  </section>
-  
-  <section class="section">
-    <div class="container">
-      <h2>System Requirements</h2>
+    </section>
+    
+    <section class="section">
+      <h2 class="section-title">💻 Installation</h2>
+      
       <div class="requirements">
+        <h3>System Requirements</h3>
         <ul>
-          <li>Windows 10 or later (64-bit)</li>
-          <li>No additional software required</li>
-          <li>Network access to target devices (SSH/HTTPS)</li>
-          <li>~50MB disk space</li>
+          <li>Windows 10/11 (64-bit)</li>
+          <li>Node.js 18+ (included in portable)</li>
+          <li>Git (for version control)</li>
+          <li>SSH access to network devices</li>
         </ul>
       </div>
+      
+      <h3 style="font-size: 16px; margin: 24px 0 12px;">Quick Start</h3>
+      <div class="code-block">
+        <span class="comment"># Download and extract the release</span><br>
+        <span class="comment"># Then run:</span><br><br>
+        <span class="cmd">npm install</span><br>
+        <span class="cmd">npm start</span><br><br>
+        <span class="comment"># Open http://localhost:3078 in your browser</span>
+      </div>
+      
+      <h3 style="font-size: 16px; margin: 24px 0 12px;">CSV Import Format</h3>
+      <div class="code-block">
+        name,host,port,vendor,username,password<br>
+        core-sw-01,10.0.0.1,22,cisco-ios,admin,SecurePass123<br>
+        fw-01,10.0.0.2,22,palo-alto,admin,PaloPass456<br>
+        juniper-edge,10.0.0.3,22,juniper,root,JuniperPass789
+      </div>
+    </section>
+    
+    <div class="download-section">
+      <h2>Ready to Automate Your Backups?</h2>
+      <p>Download Config Scraper and start backing up configs in minutes.</p>
+      <a href="https://github.com/Quad0tools/config-scraper/releases/latest" class="btn btn-primary">
+        <span>📥</span> Download Latest Release
+        <span class="version-badge">v1.0.0</span>
+      </a>
     </div>
-  </section>
+  </div>
   
   <footer>
     <div class="container">
-      <p>© 2026 NetStatMan. <a href="/">Browse all tools</a></p>
+      <p>© 2026 <a href="/">NetStatMan</a> — Built by <a href="https://quad0.com" target="_blank">Quad 0 Consulting</a></p>
     </div>
   </footer>
 </body>
