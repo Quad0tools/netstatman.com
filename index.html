@@ -941,10 +941,37 @@
       <div class="newsletter">
         <h3>🚀 Get Notified About New Tools</h3>
         <p>We'll email you when we ship something new. No spam, unsubscribe anytime.</p>
-        <form class="newsletter-form" action="#" method="POST">
-          <input type="email" placeholder="you@company.com" required>
-          <button type="submit" class="btn btn-primary">Subscribe</button>
+        <form class="newsletter-form" id="subscribe-form">
+          <input type="email" id="subscribe-email" placeholder="you@company.com" required>
+          <button type="submit" class="btn btn-primary" id="subscribe-btn">Subscribe</button>
         </form>
+        <p id="subscribe-msg" style="display:none; margin-top: 12px; font-size: 0.9rem;"></p>
+        <script>
+          document.getElementById('subscribe-form').addEventListener('submit', async (e) => {
+            e.preventDefault();
+            const btn = document.getElementById('subscribe-btn');
+            const msg = document.getElementById('subscribe-msg');
+            const email = document.getElementById('subscribe-email').value;
+            btn.disabled = true; btn.textContent = '...';
+            try {
+              const res = await fetch('/api/subscribe', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ email })
+              });
+              const data = await res.json();
+              msg.style.display = 'block';
+              msg.style.color = data.ok ? '#4ade80' : '#f87171';
+              msg.textContent = data.ok ? '✅ ' + data.message : '❌ ' + (data.error || 'Something went wrong');
+              if (data.ok) { document.getElementById('subscribe-email').value = ''; }
+            } catch {
+              msg.style.display = 'block';
+              msg.style.color = '#f87171';
+              msg.textContent = '❌ Network error — try again';
+            }
+            btn.disabled = false; btn.textContent = 'Subscribe';
+          });
+        </script>
       </div>
     </div>
   </section>
