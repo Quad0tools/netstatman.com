@@ -1,2 +1,6 @@
 name = "netstatman"
 pages_build_output_dir = "."
+
+[[kv_namespaces]]
+binding = "SUBSCRIBERS"
+id = "f73dcca7ffb7425696342122245ec004"
